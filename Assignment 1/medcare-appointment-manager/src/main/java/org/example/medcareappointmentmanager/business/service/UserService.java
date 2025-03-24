@@ -27,8 +27,6 @@ public class UserService {
         Optional<User> user = userRepository.findByUsername(loginDTO.username());
 
         if (user.isPresent() && passwordEncoder.matches(loginDTO.password(), user.get().getPassword())) {
-//            UserDTO userDTO = new UserDTO(user.get().getId(), user.get().getUsername(), new UserTypeDTO(user.get().getType().getId(), user.get().getType().getType()));
-//            System.out.println(userDTO.username());
             return userMapper.toDTO(user.get());
         }
 

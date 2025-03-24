@@ -89,7 +89,6 @@ public class AuthenticationController implements ActionListener {
         if(panel == null) {
             buildUI();
         }
-
         return panel;
     }
 }

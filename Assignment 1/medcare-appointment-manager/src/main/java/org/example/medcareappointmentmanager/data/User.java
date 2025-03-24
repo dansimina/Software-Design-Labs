@@ -8,6 +8,10 @@ import jakarta.validation.constraints.Size;
 @Entity
 public class User extends AbstractEntity {
     @NotBlank(message = "Name is required!")
+    @Size(min = 1, max = 50, message = "Name must be between 3 and 50 characters")
+    private String name;
+
+    @NotBlank(message = "Userame is required!")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     private String username;
 
@@ -18,6 +22,14 @@ public class User extends AbstractEntity {
     private UserType type;
 
     public User() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUsername() {

@@ -4,4 +4,5 @@ import org.example.medcareappointmentmanager.data.User;
 
 import java.util.List;
 
-public record UserTypeDTO (Long id, String type){}
+public record UserTypeDTO (Long id, String type){
+}

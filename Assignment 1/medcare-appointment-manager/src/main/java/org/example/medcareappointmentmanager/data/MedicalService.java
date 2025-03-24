@@ -19,7 +19,7 @@ public class MedicalService extends AbstractEntity {
     @NotNull(message = "Duration is required!")
     private Integer duration;
 
-    @OneToMany
+    @OneToMany(mappedBy = "medicalService")
     private List<Appointment> appointments;
 
     public MedicalService() {

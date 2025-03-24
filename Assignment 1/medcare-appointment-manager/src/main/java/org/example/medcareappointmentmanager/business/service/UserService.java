@@ -2,7 +2,6 @@ package org.example.medcareappointmentmanager.business.service;
 
 import org.example.medcareappointmentmanager.business.dto.LoginDTO;
 import org.example.medcareappointmentmanager.business.dto.UserDTO;
-import org.example.medcareappointmentmanager.business.dto.UserTypeDTO;
 import org.example.medcareappointmentmanager.business.mapper.UserMapper;
 import org.example.medcareappointmentmanager.data.User;
 import org.example.medcareappointmentmanager.dataaccess.UserRepository;

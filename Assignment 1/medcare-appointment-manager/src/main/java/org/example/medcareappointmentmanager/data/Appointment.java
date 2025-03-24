@@ -12,9 +12,6 @@ public class Appointment extends AbstractEntity {
     @NotNull(message = "Patient name is required!")
     private String patientName;
 
-    @NotNull(message = "Name is required!")
-    private String name;
-
     @ManyToOne
     private Doctor doctor;
 
@@ -39,14 +36,6 @@ public class Appointment extends AbstractEntity {
 
     public void setPatientName(String patientName) {
         this.patientName = patientName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Doctor getDoctor() {

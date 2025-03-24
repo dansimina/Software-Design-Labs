@@ -10,34 +10,28 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class DataInitializer implements CommandLineRunner {
+public class DataInitializer {
 
-    private final UserRepository userRepository;
-    private final UserTypeRepository userTypeRepository;
+    @Bean
+    public CommandLineRunner initializeData(UserRepository userRepository, UserTypeRepository userTypeRepository) {
+        return args -> {
+            UserType adminType = userTypeRepository.findByType("admin")
+                    .orElseGet(() -> {
+                        UserType newType = new UserType();
+                        newType.setType("admin");
+                        return userTypeRepository.save(newType);
+                    });
 
-    private final PasswordEncoder passwordEncoder;
-
-    public DataInitializer(UserRepository userRepository, UserTypeRepository userTypeRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.userTypeRepository = userTypeRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Override
-    public void run(String... args) {
-        UserType adminType = userTypeRepository.findByType("admin").orElse(null);
-        if (adminType == null) {
-            adminType = new UserType();
-            adminType.setType("admin");
-            userTypeRepository.save(adminType);
-        }
-
-        if (userRepository.findByUsername("admin").isEmpty()) {
-            User admin = new User();
-            admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("admin"));
-            admin.setType(adminType);
-            userRepository.save(admin);
-        }
+            if (userRepository.findByUsername("admin").isEmpty()) {
+                User adminUser = new User();
+                adminUser.setUsername("admin");
+                adminUser.setPassword("admin"); // Ar trebui criptată în practică
+                adminUser.setType(adminType);
+                userRepository.save(adminUser);
+                System.out.println("Admin user created.");
+            } else {
+                System.out.println("Admin user already exists.");
+            }
+        };
     }
 }

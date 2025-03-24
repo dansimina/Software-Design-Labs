@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class DataInitializer {
 
     @Bean
-    public CommandLineRunner initializeData(UserRepository userRepository, UserTypeRepository userTypeRepository) {
+    public CommandLineRunner initializeData(UserRepository userRepository, UserTypeRepository userTypeRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             UserType adminType = userTypeRepository.findByType("admin")
                     .orElseGet(() -> {
@@ -25,7 +25,7 @@ public class DataInitializer {
             if (userRepository.findByUsername("admin").isEmpty()) {
                 User adminUser = new User();
                 adminUser.setUsername("admin");
-                adminUser.setPassword("admin"); // Ar trebui criptată în practică
+                adminUser.setPassword(passwordEncoder.encode("admin"));
                 adminUser.setType(adminType);
                 userRepository.save(adminUser);
                 System.out.println("Admin user created.");

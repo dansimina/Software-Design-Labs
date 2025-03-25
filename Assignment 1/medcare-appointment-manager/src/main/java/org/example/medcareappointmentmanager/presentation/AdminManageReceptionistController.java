@@ -36,7 +36,8 @@ public class AdminManageReceptionistController extends AbstractController {
         panel.setBackground(new Color(250, 250, 250));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JTable receptionistTable = new JTable(); // Setat ulterior prin reflection
+        JTable receptionistTable = new JTable();
+        receptionistTable.setEnabled(false);
         receptionistTable.setFillsViewportHeight(true);
         receptionistTable.setRowHeight(24);
         receptionistTable.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -132,8 +133,6 @@ public class AdminManageReceptionistController extends AbstractController {
 
     private void updateTable() {
         List<UserDTO> receptionist = userService.getUsersByType("receptionist");
-        if(receptionist != null) {
-            PopulateTable.populateTable(receptionist, receptionistTable);
-        }
+        PopulateTable.populateTable(receptionist, receptionistTable);
     }
 }

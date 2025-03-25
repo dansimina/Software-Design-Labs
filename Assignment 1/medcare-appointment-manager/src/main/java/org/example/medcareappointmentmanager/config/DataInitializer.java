@@ -22,6 +22,13 @@ public class DataInitializer {
                         return userTypeRepository.save(newType);
                     });
 
+            userTypeRepository.findByType("receptionist")
+                    .orElseGet(() -> {
+                        UserType newType = new UserType();
+                        newType.setType("receptionist");
+                        return userTypeRepository.save(newType);
+                    });
+
             if (userRepository.findByUsername("admin").isEmpty()) {
                 User adminUser = new User();
                 adminUser.setName("admin");

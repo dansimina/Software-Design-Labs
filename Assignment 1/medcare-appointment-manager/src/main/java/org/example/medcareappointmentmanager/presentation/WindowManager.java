@@ -25,9 +25,24 @@ public class WindowManager {
         refresh();
     }
 
-    public void showAdminMainWindow(UserDTO user) {
+    public void showMainWindow(UserDTO user) {
         if (user != null && "admin".equals(user.type().type())) {
             AdminMainWindowController controller = context.getBean(AdminMainWindowController.class);
+            controller.setUser(user);
+            mainFrame.setContentPane(controller.getPanel());
+            refresh();
+        }
+        else if(user != null && "receptionist".equals(user.type().type())) {
+            ReceptionstMainWindowController controller = context.getBean(ReceptionstMainWindowController.class);
+            controller.setUser(user);
+            mainFrame.setContentPane(controller.getPanel());
+            refresh();
+        }
+    }
+
+    public void showAdminManageReceptionistWindow(UserDTO user) {
+        if (user != null && "admin".equals(user.type().type())) {
+            AdminManageReceptionistController controller = context.getBean(AdminManageReceptionistController.class);
             controller.setUser(user);
             mainFrame.setContentPane(controller.getPanel());
             refresh();

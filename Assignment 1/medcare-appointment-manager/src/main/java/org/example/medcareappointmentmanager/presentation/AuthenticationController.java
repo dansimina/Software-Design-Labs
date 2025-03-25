@@ -9,24 +9,21 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 @Component
-public class AuthenticationController implements ActionListener {
+public class AuthenticationController extends AbstractController {
     private final UserService userService;
-    private final WindowManager windowManager;
 
-    private JPanel panel;
     private JTextField usernameField;
     private JPasswordField passwordField;
 
     @Autowired
     public AuthenticationController(UserService userService, WindowManager windowManager) {
+        super(windowManager);
         this.userService = userService;
-        this.windowManager = windowManager;
     }
 
-    private void buildUI() {
+    protected void buildUI() {
         panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.CYAN);
 
@@ -80,15 +77,8 @@ public class AuthenticationController implements ActionListener {
             UserDTO user = userService.login(loginDTO);
 
             if(user != null) {
-                windowManager.showAdminMainWindow(user);
+                windowManager.showMainWindow(user);
             }
         }
-    }
-
-    public JPanel getPanel() {
-        if(panel == null) {
-            buildUI();
-        }
-        return panel;
     }
 }

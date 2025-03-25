@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,22 +35,22 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public UserDTO login(LoginDTO loginDTO) {
-        Optional<User> user = userRepository.findByUsername(loginDTO.username());
+        User user = userRepository.findByUsername(loginDTO.username()).orElse(null);
 
-        if (user.isPresent() && passwordEncoder.matches(loginDTO.password(), user.get().getPassword())) {
-            return userMapper.toDTO(user.get());
+        if (user != null && passwordEncoder.matches(loginDTO.password(), user.getPassword())) {
+            return userMapper.toDTO(user);
         }
 
         return null;
     }
 
     public UserDTO register(CreateUserDTO userDTO, String type) {
-        Optional<UserType> userType = userTypeRepository.findByType(type);
+        UserType userType = userTypeRepository.findByType(type).orElse(null);
 
-        if(userType.isPresent()) {
+        if(userType != null) {
             User user = createUserMapper.toEntity(userDTO);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setType(userType.get());
+            user.setType(userType);
 
             User newUser = userRepository.save(user);
             return userMapper.toDTO(newUser);
@@ -56,4 +58,15 @@ public class UserService {
 
         return null;
     }
+
+    public List<UserDTO> getUsersByType(String type) {
+        UserType userType = userTypeRepository.findByType(type).orElse(null);
+        if (userType == null) {
+            return Collections.emptyList();
+        }
+
+        List<User> users = userRepository.findUsersByType(userType).orElse(Collections.emptyList());
+        return userMapper.toDTO(users);
+    }
+
 }

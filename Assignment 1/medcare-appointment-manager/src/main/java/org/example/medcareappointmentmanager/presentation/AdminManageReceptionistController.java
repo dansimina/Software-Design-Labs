@@ -9,11 +9,14 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 @Component
 public class AdminManageReceptionistController extends AbstractController {
     @Autowired
     private UserService userService;
+
+    private PopulateTable populateTable;
 
     private JTable receptionistTable;
     private JTextField nameField;
@@ -105,8 +108,9 @@ public class AdminManageReceptionistController extends AbstractController {
         this.usernameField = usernameField;
         this.passwordField = passwordField;
         this.errorLabel = errorLabel;
-    }
 
+        updateTable();
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -116,12 +120,20 @@ public class AdminManageReceptionistController extends AbstractController {
                 UserDTO newUser = userService.register(new CreateUserDTO(nameField.getText(), usernameField.getText(), passwordField.getText()), "receptionist");
                 if(newUser != null) {
                     errorLabel.setVisible(false);
+                    updateTable();
                 }
                 else {
                     errorLabel.setVisible(true);
                     errorLabel.setText("Error");
                 }
             }
+        }
+    }
+
+    private void updateTable() {
+        List<UserDTO> receptionist = userService.getUsersByType("receptionist");
+        if(receptionist != null) {
+            PopulateTable.populateTable(receptionist, receptionistTable);
         }
     }
 }

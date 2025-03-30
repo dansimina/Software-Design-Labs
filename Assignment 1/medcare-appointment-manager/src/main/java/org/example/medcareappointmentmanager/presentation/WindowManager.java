@@ -1,6 +1,7 @@
 package org.example.medcareappointmentmanager.presentation;
 
 import org.example.medcareappointmentmanager.business.dto.UserDTO;
+import org.example.medcareappointmentmanager.presentation.controller.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -40,9 +41,36 @@ public class WindowManager {
         }
     }
 
-    public void showAdminManageReceptionistWindow(UserDTO user) {
+    public void showAdminReceptionistManagementWindow(UserDTO user) {
         if (user != null && "admin".equals(user.type().type())) {
-            AdminManageReceptionistController controller = context.getBean(AdminManageReceptionistController.class);
+            AdminReceptionistManagementController controller = context.getBean(AdminReceptionistManagementController.class);
+            controller.setUser(user);
+            mainFrame.setContentPane(controller.getPanel());
+            refresh();
+        }
+    }
+
+    public void showAdminDoctorManagementWindow(UserDTO user) {
+        if (user != null && "admin".equals(user.type().type())) {
+            AdminDoctorManagementController controller = context.getBean(AdminDoctorManagementController.class);
+            controller.setUser(user);
+            mainFrame.setContentPane(controller.getPanel());
+            refresh();
+        }
+    }
+
+    public void showAdminMedicalServicesManagementWindow(UserDTO user) {
+        if (user != null && "admin".equals(user.type().type())) {
+            AdminMedicalServicesManagementController controller = context.getBean(AdminMedicalServicesManagementController.class);
+            controller.setUser(user);
+            mainFrame.setContentPane(controller.getPanel());
+            refresh();
+        }
+    }
+
+    public void showReceptionistAppointmentManagementWindow(UserDTO user) {
+        if (user != null && "receptionist".equals(user.type().type())) {
+            ReceptionistAppointmentManagementController controller = context.getBean(ReceptionistAppointmentManagementController.class);
             controller.setUser(user);
             mainFrame.setContentPane(controller.getPanel());
             refresh();

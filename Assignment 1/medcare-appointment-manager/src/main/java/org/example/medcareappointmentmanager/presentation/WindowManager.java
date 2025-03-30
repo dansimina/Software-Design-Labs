@@ -77,6 +77,15 @@ public class WindowManager {
         }
     }
 
+    public void showReceptionistAppointmentViewWindow(UserDTO user) {
+        if (user != null && "receptionist".equals(user.type().type())) {
+            ReceptionistAppointmentViewController controller = context.getBean(ReceptionistAppointmentViewController.class);
+            controller.setUser(user);
+            mainFrame.setContentPane(controller.getPanel());
+            refresh();
+        }
+    }
+
     private void refresh() {
         mainFrame.revalidate();
         mainFrame.repaint();

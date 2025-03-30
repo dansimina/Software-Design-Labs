@@ -1,6 +1,5 @@
 package org.example.medcareappointmentmanager.presentation.view;
 
-
 import org.example.medcareappointmentmanager.presentation.controller.ReceptionistAppointmentManagementController;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -18,6 +17,7 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
     private JTable serviceTable;
     private JTextField patientNameField;
     private JComboBox<String> hourComboBox;
+    private JComboBox<String> statusComboBox;
     private JDatePickerImpl datePicker;
 
     public ReceptionistAppointmentManagementPanel(ReceptionistAppointmentManagementController controller) {
@@ -42,7 +42,7 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
         tablesPanel.add(doctorScroll);
         tablesPanel.add(serviceScroll);
 
-        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10)); // was 3 rows, now 4
         formPanel.setBackground(BACKGROUND_COLOR);
 
         patientNameField = new JTextField();
@@ -52,6 +52,10 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
             hourComboBox.addItem(String.format("%02d:00", i));
             hourComboBox.addItem(String.format("%02d:30", i));
         }
+
+        statusComboBox = new JComboBox<>(new String[] {
+                "new", "ongoing", "completed"
+        });
 
         UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
@@ -67,6 +71,8 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
         formPanel.add(hourComboBox);
         formPanel.add(new JLabel("Appointment Date:", JLabel.RIGHT));
         formPanel.add(datePicker);
+        formPanel.add(new JLabel("Appointment Status:", JLabel.RIGHT));
+        formPanel.add(statusComboBox);
 
         JButton back = createStyledButton("Back");
         JButton save = createStyledButton("Save");
@@ -105,5 +111,9 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
 
     public java.util.Date getSelectedDate() {
         return (java.util.Date) datePicker.getModel().getValue();
+    }
+
+    public String getSelectedStatus() {
+        return (String) statusComboBox.getSelectedItem();
     }
 }

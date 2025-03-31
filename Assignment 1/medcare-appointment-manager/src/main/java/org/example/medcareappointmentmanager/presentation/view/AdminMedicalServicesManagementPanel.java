@@ -147,9 +147,9 @@ public class AdminMedicalServicesManagementPanel extends AbstractPanel {
         durationBox.setSelectedIndex(0);
     }
 
-    public Integer getServiceId() {
+    public Long getServiceId() {
         if (idLabel.getText().equals("-")) return null;
-        return Integer.parseInt(idLabel.getText());
+        return Long.parseLong(idLabel.getText());
     }
 
     public String getServiceName() {

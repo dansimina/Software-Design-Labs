@@ -161,9 +161,9 @@ public class AdminDoctorManagementPanel extends AbstractPanel {
         endHourBox.setSelectedIndex(0);
     }
 
-    public Integer getIdLabel() {
+    public Long getIdLabel() {
         if(idLabel.getText().equals("-")) return null;
-        return Integer.parseInt(idLabel.getText());
+        return Long.parseLong(idLabel.getText());
     }
 
     public String getDoctorName() {

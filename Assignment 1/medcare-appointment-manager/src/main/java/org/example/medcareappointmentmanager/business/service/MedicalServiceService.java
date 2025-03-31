@@ -41,4 +41,8 @@ public class MedicalServiceService {
     public void delete(MedicalServiceDTO medicalServiceDTO) {
         medicalServiceRepository.delete(medicalServiceMapper.toEntity(medicalServiceDTO));
     }
+
+    public MedicalServiceDTO findById(Long id) {
+        return medicalServiceMapper.toDTO(medicalServiceRepository.findById(id).get());
+    }
 }

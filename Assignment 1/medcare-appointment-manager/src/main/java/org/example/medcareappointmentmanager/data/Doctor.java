@@ -29,6 +29,14 @@ public class Doctor extends AbstractEntity {
     public Doctor() {
     }
 
+    public Doctor(String name, String specialization, Time startOfProgram, Time endOfProgram, List<Appointment> appointments) {
+        this.name = name;
+        this.specialization = specialization;
+        this.startOfProgram = startOfProgram;
+        this.endOfProgram = endOfProgram;
+        this.appointments = appointments;
+    }
+
     public String getName() {
         return name;
     }

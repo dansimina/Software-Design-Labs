@@ -25,6 +25,13 @@ public class MedicalService extends AbstractEntity {
     public MedicalService() {
     }
 
+    public MedicalService(String name, Integer price, Integer duration, List<Appointment> appointments) {
+        this.name = name;
+        this.price = price;
+        this.duration = duration;
+        this.appointments = appointments;
+    }
+
     public String getName() {
         return name;
     }

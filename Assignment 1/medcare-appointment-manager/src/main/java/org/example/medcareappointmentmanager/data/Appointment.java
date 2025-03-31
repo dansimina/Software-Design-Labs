@@ -30,6 +30,15 @@ public class Appointment extends AbstractEntity {
     public Appointment() {
     }
 
+    public Appointment(String patientName, Doctor doctor, MedicalService medicalService, Date date, Time time, AppointmentStatus status) {
+        this.patientName = patientName;
+        this.doctor = doctor;
+        this.medicalService = medicalService;
+        this.date = date;
+        this.time = time;
+        this.status = status;
+    }
+
     public String getPatientName() {
         return patientName;
     }

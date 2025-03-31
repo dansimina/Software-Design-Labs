@@ -14,4 +14,14 @@ public enum AppointmentStatus {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static AppointmentStatus fromDisplayName(String status) {
+        for (AppointmentStatus s : values()) {
+            if (s.displayName.equalsIgnoreCase(status)) {
+                return s;
+            }
+        }
+        throw new IllegalArgumentException("Invalid status: " + status);
+    }
 }
+

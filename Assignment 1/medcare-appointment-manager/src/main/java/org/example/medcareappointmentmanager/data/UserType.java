@@ -18,6 +18,11 @@ public class UserType extends AbstractEntity{
     public UserType() {
     }
 
+    public UserType(String type, List<User> users) {
+        this.type = type;
+        this.users = users;
+    }
+
     public String getType() {
         return type;
     }

@@ -65,6 +65,6 @@ public class AppointmentService {
     }
 
     public List<AppointmentDTO> findAll() {
-        return appointmentMapper.toDTO((List<Appointment>) appointmentRepository.findAll());
+        return appointmentMapper.toDTO(appointmentRepository.findAll());
     }
 }

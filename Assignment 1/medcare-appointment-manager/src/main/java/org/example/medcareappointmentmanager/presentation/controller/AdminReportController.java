@@ -24,7 +24,15 @@ public class AdminReportController extends AbstractController {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        switch (e.getActionCommand()) {
+            case "back" -> windowManager.showMainWindow(user);
+            case "generate" -> {
+                panel.updateTableAppointments(reportService.getAppointmentsReport(panel.getStartDate(), panel.getEndDate()));
+                panel.updateTableDoctors(reportService.getDoctorsReport(panel.getStartDate(), panel.getEndDate()));
+                panel.updateTableMedicalServices(reportService.getMedicalServicesReport(panel.getStartDate(), panel.getEndDate()));
+            }
+            case "export" -> {}
+        }
     }
 
     @Override

@@ -1,5 +1,9 @@
 package org.example.medcareappointmentmanager.presentation.view;
 
+import org.example.medcareappointmentmanager.business.dto.AppointmentDTO;
+import org.example.medcareappointmentmanager.business.dto.DoctorDTO;
+import org.example.medcareappointmentmanager.business.dto.DoctorReportDTO;
+import org.example.medcareappointmentmanager.business.dto.MedicalServiceReportDTO;
 import org.example.medcareappointmentmanager.presentation.controller.AdminReportController;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -10,9 +14,11 @@ import org.jdatepicker.impl.SqlDateModel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 public class AdminReportPanel extends AbstractPanel {
@@ -70,7 +76,7 @@ public class AdminReportPanel extends AbstractPanel {
 
         appointmentsTable = new JTable(new DefaultTableModel(
                 new Object[][] {},
-                new String[] {"ID", "Patient", "Doctor", "Service", "Date", "Time", "Status"}
+                new String[] {"ID", "Patient", "DoctorId", "Doctor", "ServiceId", "Service", "Date", "Time", "Status"}
         ));
         JScrollPane appointmentScrollPane = new JScrollPane(appointmentsTable);
         appointmentScrollPane.setPreferredSize(new Dimension(600, 300));
@@ -104,28 +110,75 @@ public class AdminReportPanel extends AbstractPanel {
         add(southWrapper, BorderLayout.SOUTH);
     }
 
-    public LocalDate getStartDate() {
-        Date selectedDate = (Date) startDatePicker.getModel().getValue();
+    public void updateTableAppointments(List<AppointmentDTO> appointments) {
+        DefaultTableModel model = (DefaultTableModel) appointmentsTable.getModel();
+        model.setRowCount(0);
 
-        if (selectedDate == null) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (AppointmentDTO appointment : appointments) {
+            model.addRow(new Object[] {
+                    appointment.id(),
+                    appointment.patientName(),
+                    appointment.doctor().id(),
+                    appointment.doctor().name(),
+                    appointment.medicalService().id(),
+                    appointment.medicalService().name(),
+                    appointment.date(),
+                    appointment.time().toString(),
+                    appointment.status().name().toLowerCase()
+            });
+        }
+    }
+
+    public void updateTableDoctors(List<DoctorReportDTO> doctors) {
+        DefaultTableModel model = (DefaultTableModel) doctorReportTable.getModel();
+        model.setRowCount(0);
+
+        for (DoctorReportDTO doctor : doctors) {
+            model.addRow(new Object[] {
+                    doctor.id(),
+                    doctor.name(),
+                    doctor.noOfAppointments()
+            });
+        }
+    }
+
+    public void updateTableMedicalServices(List<MedicalServiceReportDTO> medicalServices) {
+        DefaultTableModel model = (DefaultTableModel) serviceReportTable.getModel();
+        model.setRowCount(0);
+
+        for(MedicalServiceReportDTO medicalService : medicalServices) {
+            model.addRow(new Object[] {
+                    medicalService.id(),
+                    medicalService.name(),
+                    medicalService.noOfAppointments()
+            });
+        }
+    }
+
+    public LocalDate getStartDate() {
+        if (!startDatePicker.getModel().isSelected()) {
             return null;
         }
 
-        return selectedDate.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+        int year = startDatePicker.getModel().getYear();
+        int month = startDatePicker.getModel().getMonth();  // zero-based!
+        int day = startDatePicker.getModel().getDay();
+
+        return LocalDate.of(year, month + 1, day);
     }
 
     public LocalDate getEndDate() {
-        Date selectedDate = (Date) endDatePicker.getModel().getValue();
-
-        if (selectedDate == null) {
+        if (!endDatePicker.getModel().isSelected()) {
             return null;
         }
 
-        return selectedDate.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+        int year = endDatePicker.getModel().getYear();
+        int month = endDatePicker.getModel().getMonth();  // zero-based!
+        int day = endDatePicker.getModel().getDay();
+
+        return LocalDate.of(year, month + 1, day);
     }
 
 }

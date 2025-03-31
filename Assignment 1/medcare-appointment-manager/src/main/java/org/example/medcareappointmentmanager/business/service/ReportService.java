@@ -13,6 +13,7 @@ import org.example.medcareappointmentmanager.dataaccess.MedicalServiceRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,27 +31,27 @@ public class ReportService {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
-    public List<AppointmentDTO> getAppointmentsReport() {
-        return appointmentMapper.toDTO((List<Appointment>) appointmentRepository.findAll());
+    public List<AppointmentDTO> getAppointmentsReport(LocalDate startDate, LocalDate endDate) {
+        return appointmentMapper.toDTO((List<Appointment>) appointmentRepository.findBetweenDates(startDate, endDate));
     }
 
-    public List<DoctorReportDTO> getDoctorsReport() {
+    public List<DoctorReportDTO> getDoctorsReport(LocalDate startDate, LocalDate endDate) {
         List<DoctorReportDTO> doctorsReport= new ArrayList<>();
         List<Doctor> doctors = doctorRepository.findAll();
 
         for (Doctor doctor : doctors) {
-            doctorsReport.add(new DoctorReportDTO(doctor.getId(), doctor.getName(), appointmentRepository.countByDoctorId(doctor.getId())));
+            doctorsReport.add(new DoctorReportDTO(doctor.getId(), doctor.getName(), appointmentRepository.countByDoctorId(doctor.getId(), startDate, endDate)));
         }
 
         return doctorsReport;
     }
 
-    public List<MedicalServiceReportDTO> getMedicalServicesReport() {
+    public List<MedicalServiceReportDTO> getMedicalServicesReport(LocalDate startDate, LocalDate endDate) {
         List<MedicalServiceReportDTO> medicalServicesReport= new ArrayList<>();
         List<MedicalService> medicalServices = medicalServiceRepository.findAll();
 
         for(MedicalService medicalService : medicalServices) {
-            medicalServicesReport.add(new MedicalServiceReportDTO(medicalService.getId(), medicalService.getName(), appointmentRepository.countByMedicalServiceIdId(medicalService.getId())));
+            medicalServicesReport.add(new MedicalServiceReportDTO(medicalService.getId(), medicalService.getName(), appointmentRepository.countByMedicalServiceIdId(medicalService.getId(), startDate, endDate)));
         }
 
         return medicalServicesReport;

@@ -1,9 +1,9 @@
 package org.example.medcareappointmentmanager.business.service;
 
-import jakarta.transaction.Transactional;
 import org.example.medcareappointmentmanager.business.dto.AppointmentDTO;
 import org.example.medcareappointmentmanager.business.dto.CreateAppointmentDTO;
 import org.example.medcareappointmentmanager.business.mapper.AppointmentMapper;
+import org.example.medcareappointmentmanager.business.validators.AppointmentValidator;
 import org.example.medcareappointmentmanager.business.validators.Validator;
 import org.example.medcareappointmentmanager.data.Appointment;
 import org.example.medcareappointmentmanager.data.AppointmentStatus;
@@ -35,7 +35,7 @@ public class AppointmentService {
     private List<Validator> validators = new ArrayList<>();
 
     public AppointmentService() {
-
+        validators.add(new AppointmentValidator());
     }
 
     public AppointmentDTO save(CreateAppointmentDTO dto) {
@@ -54,7 +54,14 @@ public class AppointmentService {
                 AppointmentStatus.fromDisplayName(dto.status())
         );
 
+        for(Validator validator : validators){
+            validator.validate(appointment);
+        }
+
         return appointmentMapper.toDTO(appointmentRepository.save(appointment));
     }
 
+    public List<AppointmentDTO> findAll() {
+        return appointmentMapper.toDTO((List<Appointment>) appointmentRepository.findAll());
+    }
 }

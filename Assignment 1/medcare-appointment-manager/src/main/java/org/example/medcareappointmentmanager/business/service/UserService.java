@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -44,7 +43,7 @@ public class UserService {
         return null;
     }
 
-    public UserDTO register(CreateUserDTO userDTO, String type) {
+    public UserDTO save(CreateUserDTO userDTO, String type) {
         UserType userType = userTypeRepository.findByType(type).orElse(null);
 
         if(userType != null) {
@@ -59,7 +58,7 @@ public class UserService {
         return null;
     }
 
-    public List<UserDTO> getUsersByType(String type) {
+    public List<UserDTO> getByType(String type) {
         UserType userType = userTypeRepository.findByType(type).orElse(null);
         if (userType == null) {
             return Collections.emptyList();

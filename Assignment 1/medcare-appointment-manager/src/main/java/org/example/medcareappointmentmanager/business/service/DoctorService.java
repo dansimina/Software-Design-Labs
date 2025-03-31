@@ -32,8 +32,8 @@ public class DoctorService {
         }
 
         Doctor doctor = doctorMapper.toEntity(doctorDTO);
-        Doctor newDoctor = doctorRepository.save(doctor);
-        return doctorMapper.toDTO(newDoctor);
+        Doctor savedDoctor = doctorRepository.save(doctor);
+        return doctorMapper.toDTO(savedDoctor);
     }
 
     public List<DoctorDTO> findAll() {

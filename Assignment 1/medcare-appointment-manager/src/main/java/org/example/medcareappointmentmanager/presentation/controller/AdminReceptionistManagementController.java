@@ -28,7 +28,7 @@ public class AdminReceptionistManagementController extends AbstractController {
         switch (e.getActionCommand()) {
             case "back" -> windowManager.showMainWindow(user);
             case "save" -> {
-                UserDTO newUser = userService.register(panel.getNewUser(), "receptionist");
+                UserDTO newUser = userService.save(panel.getNewUser(), "receptionist");
                 if(newUser != null) {
                     panel.clearError();
                     updateTable();
@@ -41,7 +41,7 @@ public class AdminReceptionistManagementController extends AbstractController {
     }
 
     private void updateTable() {
-        List<UserDTO> receptionist = userService.getUsersByType("receptionist");
+        List<UserDTO> receptionist = userService.getByType("receptionist");
         panel.updateTable(receptionist);
     }
 

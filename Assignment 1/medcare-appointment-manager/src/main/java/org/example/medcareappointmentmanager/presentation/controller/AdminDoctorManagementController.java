@@ -40,7 +40,7 @@ public class AdminDoctorManagementController extends AbstractController {
             case "back" -> windowManager.showMainWindow(user);
             case "save" -> {
                 try {
-                    DoctorDTO doctor = doctorService.save(new DoctorDTO(panel.getIdLabel(), panel.getDoctorName(), panel.getSpecialization(), panel.getStartHour(), panel.getEndHour()));
+                    doctorService.save(new DoctorDTO(panel.getIdLabel(), panel.getDoctorName(), panel.getSpecialization(), panel.getStartHour(), panel.getEndHour()));
                     this.panel.clearError();
                     this.panel.clearFields();
                     this.panel.updateTable(doctorService.findAll());

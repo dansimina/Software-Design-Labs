@@ -18,7 +18,16 @@ public class AdminMedicalServicesManagementController extends AbstractController
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()) {
+            case "back" -> windowManager.showMainWindow(user);
+            case "save" -> {}
+            case "clear" -> {
 
+            }
+            case "delete" -> {
+
+            }
+        }
     }
 
     @Override

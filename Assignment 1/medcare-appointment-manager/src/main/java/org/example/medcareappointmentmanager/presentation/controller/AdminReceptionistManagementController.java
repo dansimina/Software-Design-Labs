@@ -13,8 +13,7 @@ import java.util.List;
 
 @Component
 public class AdminReceptionistManagementController extends AbstractController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     private AdminReceptionistManagementPanel panel;
 

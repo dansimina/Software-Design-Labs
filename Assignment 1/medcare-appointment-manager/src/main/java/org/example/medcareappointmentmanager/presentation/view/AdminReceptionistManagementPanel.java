@@ -23,7 +23,7 @@ public class AdminReceptionistManagementPanel extends AbstractPanel {
     }
 
     protected void buildUI() {
-        DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] {"Name", "Username"}) {
+        DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] {"Id", "Name", "Username", "Type"}) {
             public boolean isCellEditable(int row, int column) { return false; }
         };
 
@@ -63,7 +63,17 @@ public class AdminReceptionistManagementPanel extends AbstractPanel {
     }
 
     public void updateTable(List<UserDTO> receptionist) {
-        PopulateTable.populateTable(receptionist, receptionistTable);
+        DefaultTableModel model = (DefaultTableModel) receptionistTable.getModel();
+        model.setRowCount(0);
+
+        for(UserDTO user : receptionist) {
+            model.addRow(new Object[]{
+                    user.id()
+                    ,user.name()
+                    ,user.username()
+                    ,user.type().type()
+            });
+        }
     }
 
     public void setError(String error) {

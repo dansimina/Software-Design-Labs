@@ -47,14 +47,13 @@ public class ReceptionistAppointmentManagementController extends AbstractControl
         switch (e.getActionCommand()) {
             case "back" -> windowManager.showMainWindow(user);
             case "save" -> {
-//                try{
-//                    appointmentService.save(new CreateAppointmentDTO(panel.getPatientName(), panel.getDoctorIdLabel(), panel.getServiceIdLabel(), panel.getSelectedDate(), panel.getSelectedHour(), panel.getSelectedStatus()));
-//                    this.panel.setError("Success");
-//                }
-//                catch (Exception ex){
-//                    this.panel.setError(ex.getMessage());
-//                }
-                panel.setError(panel.getDoctorIdLabel().toString());
+                try{
+                    appointmentService.save(new CreateAppointmentDTO(panel.getPatientName(), panel.getDoctorIdLabel(), panel.getServiceIdLabel(), panel.getSelectedDate(), panel.getSelectedHour(), panel.getSelectedStatus()));
+                    this.panel.setError("Success");
+                }
+                catch (Exception ex){
+                    this.panel.setError(ex.getMessage());
+                }
             }
         }
     }

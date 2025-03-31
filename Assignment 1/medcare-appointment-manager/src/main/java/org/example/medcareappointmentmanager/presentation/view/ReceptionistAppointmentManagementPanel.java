@@ -10,7 +10,6 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
 import java.sql.Time;
 import java.time.LocalTime;
@@ -27,15 +26,15 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
     private JComboBox<String> hourComboBox;
     private JComboBox<String> statusComboBox;
     private JDatePickerImpl datePicker;
-    private JLabel doctorIdLabel;
-    private JLabel doctorNameLabel;
-    private JLabel doctorSpecLabel;
-    private JLabel doctorStartLabel;
-    private JLabel doctorEndLabel;
-    private JLabel serviceIdLabel;
-    private JLabel serviceNameLabel;
-    private JLabel serviceDurationLabel;
-    private JLabel servicePriceLabel;
+    private JLabel doctorIdValueLabel;
+    private JLabel doctorNameValueLabel;
+    private JLabel doctorSpecValueLabel;
+    private JLabel doctorStartValueLabel;
+    private JLabel doctorEndValueLabel;
+    private JLabel serviceIdValueLabel;
+    private JLabel serviceNameValueLabel;
+    private JLabel serviceDurationValueLabel;
+    private JLabel servicePriceValueLabel;
     private JLabel errorLabel;
 
     public ReceptionistAppointmentManagementPanel(ReceptionistAppointmentManagementController controller) {
@@ -62,45 +61,69 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
         tablesPanel.add(doctorScroll);
         tablesPanel.add(serviceScroll);
 
-        JPanel infoPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+        JPanel infoPanel = new JPanel(new GridLayout(5, 4, 10, 5));
         infoPanel.setBackground(BACKGROUND_COLOR);
 
-        doctorIdLabel = new JLabel("Doctor ID: -");
-        doctorNameLabel = new JLabel("Name: -");
-        doctorSpecLabel = new JLabel("Specialization: -");
-        doctorStartLabel = new JLabel("Start Hour: -");
-        doctorEndLabel = new JLabel("End Hour: -");
+        JLabel doctorIdTitle = new JLabel("Doctor ID:"); doctorIdValueLabel = new JLabel("-");
+        JLabel serviceIdTitle = new JLabel("Service ID:"); serviceIdValueLabel = new JLabel("-");
+        JLabel doctorNameTitle = new JLabel("Name:"); doctorNameValueLabel = new JLabel("-");
+        JLabel serviceNameTitle = new JLabel("Service:"); serviceNameValueLabel = new JLabel("-");
+        JLabel doctorSpecTitle = new JLabel("Specialization:"); doctorSpecValueLabel = new JLabel("-");
+        JLabel serviceDurationTitle = new JLabel("Duration:"); serviceDurationValueLabel = new JLabel("-");
+        JLabel doctorStartTitle = new JLabel("Start Hour:"); doctorStartValueLabel = new JLabel("-");
+        JLabel servicePriceTitle = new JLabel("Price:"); servicePriceValueLabel = new JLabel("-");
+        JLabel doctorEndTitle = new JLabel("End Hour:"); doctorEndValueLabel = new JLabel("-");
 
-        serviceIdLabel = new JLabel("Service ID: -");
-        serviceNameLabel = new JLabel("Service: -");
-        serviceDurationLabel = new JLabel("Duration: -");
-        servicePriceLabel = new JLabel("Price: -");
-
-        JLabel[] allLabels = {
-                doctorIdLabel, doctorNameLabel,
-                doctorSpecLabel, doctorStartLabel,
-                doctorEndLabel, serviceIdLabel,
-                serviceNameLabel, serviceDurationLabel,
-                servicePriceLabel
+        JLabel[] labels = {
+                doctorIdTitle, doctorIdValueLabel, serviceIdTitle, serviceIdValueLabel,
+                doctorNameTitle, doctorNameValueLabel, serviceNameTitle, serviceNameValueLabel,
+                doctorSpecTitle, doctorSpecValueLabel, serviceDurationTitle, serviceDurationValueLabel,
+                doctorStartTitle, doctorStartValueLabel, servicePriceTitle, servicePriceValueLabel,
+                doctorEndTitle, doctorEndValueLabel
         };
 
-        for (JLabel label : allLabels) {
+        for (JLabel label : labels) {
             label.setFont(LABEL_FONT);
             infoPanel.add(label);
         }
 
-        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(BACKGROUND_COLOR);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
 
+        errorLabel = new JLabel(" ");
+        errorLabel.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setVisible(false);
+        formPanel.add(errorLabel, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Patient Name:", JLabel.RIGHT), gbc);
+        gbc.gridx = 1;
         patientNameField = new JTextField();
+        formPanel.add(patientNameField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Appointment Hour:", JLabel.RIGHT), gbc);
+        gbc.gridx = 1;
         hourComboBox = new JComboBox<>();
         for (int i = 8; i <= 18; i++) {
             hourComboBox.addItem(String.format("%02d:00", i));
             hourComboBox.addItem(String.format("%02d:30", i));
         }
+        formPanel.add(hourComboBox, gbc);
 
-        statusComboBox = new JComboBox<>(new String[] {"new", "ongoing", "completed"});
-
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Appointment Date:", JLabel.RIGHT), gbc);
+        gbc.gridx = 1;
         UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
         p.put("text.today", "Today");
@@ -108,27 +131,19 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
         p.put("text.year", "Year");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
         datePicker = new JDatePickerImpl(datePanel, new DateComponentFormatter());
+        formPanel.add(datePicker, gbc);
 
-        formPanel.add(new JLabel("Patient Name:", JLabel.RIGHT)); formPanel.add(patientNameField);
-        formPanel.add(new JLabel("Appointment Hour:", JLabel.RIGHT)); formPanel.add(hourComboBox);
-        formPanel.add(new JLabel("Appointment Date:", JLabel.RIGHT)); formPanel.add(datePicker);
-        formPanel.add(new JLabel("Appointment Status:", JLabel.RIGHT)); formPanel.add(statusComboBox);
-
-        errorLabel = new JLabel(" ");
-        errorLabel.setFont(new Font("Segoe UI", Font.ITALIC, 13));
-        errorLabel.setForeground(Color.RED);
-        errorLabel.setVisible(false);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        formPanel.add(new JLabel("Appointment Status:", JLabel.RIGHT), gbc);
+        gbc.gridx = 1;
+        statusComboBox = new JComboBox<>(new String[] {"new", "ongoing", "completed"});
+        formPanel.add(statusComboBox, gbc);
 
         JPanel centerPanel = new JPanel(new BorderLayout(20, 0));
         centerPanel.setBackground(BACKGROUND_COLOR);
         centerPanel.add(infoPanel, BorderLayout.WEST);
         centerPanel.add(formPanel, BorderLayout.CENTER);
-
-        JPanel errorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        errorPanel.setBackground(BACKGROUND_COLOR);
-        errorPanel.add(errorLabel);
-
-        centerPanel.add(errorPanel, BorderLayout.SOUTH);
 
         JButton back = createStyledButton("Back");
         JButton save = createStyledButton("Save");
@@ -150,46 +165,41 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
         onSelectingService();
     }
 
-
     private void onSelectingDoctor() {
         doctorTable.getSelectionModel().addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) return;
-
             int row = doctorTable.getSelectedRow();
             if (row == -1) {
-                doctorIdLabel.setText("Doctor ID: -");
-                doctorNameLabel.setText("Name: -");
-                doctorSpecLabel.setText("Specialization: -");
-                doctorStartLabel.setText("Start Hour: -");
-                doctorEndLabel.setText("End Hour: -");
+                doctorIdValueLabel.setText("-");
+                doctorNameValueLabel.setText("-");
+                doctorSpecValueLabel.setText("-");
+                doctorStartValueLabel.setText("-");
+                doctorEndValueLabel.setText("-");
                 return;
             }
-
-            doctorIdLabel.setText("Doctor ID: " + doctorTable.getValueAt(row, 0).toString());
-            doctorNameLabel.setText("Name: " + doctorTable.getValueAt(row, 1).toString());
-            doctorSpecLabel.setText("Specialization: " + doctorTable.getValueAt(row, 2).toString());
-            doctorStartLabel.setText("Start Hour: " + doctorTable.getValueAt(row, 3).toString());
-            doctorEndLabel.setText("End Hour: " + doctorTable.getValueAt(row, 4).toString());
+            doctorIdValueLabel.setText(doctorTable.getValueAt(row, 0).toString());
+            doctorNameValueLabel.setText(doctorTable.getValueAt(row, 1).toString());
+            doctorSpecValueLabel.setText(doctorTable.getValueAt(row, 2).toString());
+            doctorStartValueLabel.setText(doctorTable.getValueAt(row, 3).toString());
+            doctorEndValueLabel.setText(doctorTable.getValueAt(row, 4).toString());
         });
     }
 
     private void onSelectingService() {
         serviceTable.getSelectionModel().addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) return;
-
             int row = serviceTable.getSelectedRow();
             if (row == -1) {
-                serviceIdLabel.setText("Service ID: -");
-                serviceNameLabel.setText("Service: -");
-                serviceDurationLabel.setText("Duration: -");
-                servicePriceLabel.setText("Price: -");
+                serviceIdValueLabel.setText("-");
+                serviceNameValueLabel.setText("-");
+                serviceDurationValueLabel.setText("-");
+                servicePriceValueLabel.setText("-");
                 return;
             }
-
-            serviceIdLabel.setText("Service ID: " + serviceTable.getValueAt(row, 0).toString());
-            serviceNameLabel.setText("Service: " + serviceTable.getValueAt(row, 1).toString());
-            serviceDurationLabel.setText("Duration: " + serviceTable.getValueAt(row, 2).toString());
-            servicePriceLabel.setText("Price: " + serviceTable.getValueAt(row, 3).toString());
+            serviceIdValueLabel.setText(serviceTable.getValueAt(row, 0).toString());
+            serviceNameValueLabel.setText(serviceTable.getValueAt(row, 1).toString());
+            serviceDurationValueLabel.setText(serviceTable.getValueAt(row, 2).toString());
+            servicePriceValueLabel.setText(serviceTable.getValueAt(row, 3).toString());
         });
     }
 
@@ -201,14 +211,10 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
     private void updateDoctorsTable(List<DoctorDTO> doctors) {
         DefaultTableModel model = (DefaultTableModel) doctorTable.getModel();
         model.setRowCount(0);
-
         for(DoctorDTO doctor : doctors) {
             model.addRow(new Object[]{
-                    doctor.id(),
-                    doctor.name(),
-                    doctor.specialization(),
-                    doctor.startOfProgram().toString(),
-                    doctor.endOfProgram().toString()
+                    doctor.id(), doctor.name(), doctor.specialization(),
+                    doctor.startOfProgram().toString(), doctor.endOfProgram().toString()
             });
         }
     }
@@ -216,13 +222,9 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
     private void updateMedicalServiceTable(List<MedicalServiceDTO> services) {
         DefaultTableModel model = (DefaultTableModel) serviceTable.getModel();
         model.setRowCount(0);
-
         for (MedicalServiceDTO service : services) {
             model.addRow(new Object[]{
-                    service.id(),
-                    service.name(),
-                    service.price(),
-                    service.duration()
+                    service.id(), service.name(), service.price(), service.duration()
             });
         }
     }
@@ -253,10 +255,10 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
     }
 
     public Long getDoctorIdLabel() {
-        return Long.parseLong(doctorIdLabel.getText());
+        return Long.parseLong(doctorIdValueLabel.getText());
     }
 
     public Long getServiceIdLabel() {
-        return Long.parseLong(serviceIdLabel.getText());
+        return Long.parseLong(serviceIdValueLabel.getText());
     }
 }

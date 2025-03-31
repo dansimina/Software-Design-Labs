@@ -85,7 +85,15 @@ public class AdminReceptionistManagementPanel extends AbstractPanel {
         errorLabel.setVisible(false);
     }
 
-    public CreateUserDTO getNewUser() {
-        return new CreateUserDTO(nameField.getText(), usernameField.getText(), passwordField.getText());
+    public String getNameField() {
+        return nameField.getText();
+    }
+
+    public String getUsernameField() {
+        return usernameField.getText();
+    }
+
+    public String getPasswordField() {
+        return passwordField.getText();
     }
 }

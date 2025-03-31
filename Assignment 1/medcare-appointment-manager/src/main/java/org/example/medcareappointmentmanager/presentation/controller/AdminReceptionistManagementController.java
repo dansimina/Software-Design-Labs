@@ -1,5 +1,6 @@
 package org.example.medcareappointmentmanager.presentation.controller;
 
+import org.example.medcareappointmentmanager.business.dto.CreateUserDTO;
 import org.example.medcareappointmentmanager.business.dto.UserDTO;
 import org.example.medcareappointmentmanager.business.service.UserService;
 import org.example.medcareappointmentmanager.presentation.WindowManager;
@@ -28,28 +29,23 @@ public class AdminReceptionistManagementController extends AbstractController {
         switch (e.getActionCommand()) {
             case "back" -> windowManager.showMainWindow(user);
             case "save" -> {
-                UserDTO newUser = userService.save(panel.getNewUser(), "receptionist");
-                if(newUser != null) {
-                    panel.clearError();
-                    updateTable();
+                try {
+                    userService.save(new CreateUserDTO(panel.getNameField(), panel.getUsernameField(), panel.getPasswordField()), "receptionist");
+                    this.panel.clearError();
+                    this.panel.updateTable(userService.getByType("receptionist"));
                 }
-                else {
-                    panel.setError("ceva");
+                catch(Exception ex) {
+                    this.panel.setError(ex.getMessage());
                 }
             }
         }
-    }
-
-    private void updateTable() {
-        List<UserDTO> receptionist = userService.getByType("receptionist");
-        panel.updateTable(receptionist);
     }
 
     @Override
     public void setUser(UserDTO user) {
         this.user = user;
         this.panel = new AdminReceptionistManagementPanel(this);
-        updateTable();
+        this.panel.updateTable(userService.getByType("receptionist"));
     }
 
     @Override

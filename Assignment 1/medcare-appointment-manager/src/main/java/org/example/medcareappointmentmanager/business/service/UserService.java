@@ -5,6 +5,9 @@ import org.example.medcareappointmentmanager.business.dto.LoginDTO;
 import org.example.medcareappointmentmanager.business.dto.UserDTO;
 import org.example.medcareappointmentmanager.business.mapper.CreateUserMapper;
 import org.example.medcareappointmentmanager.business.mapper.UserMapper;
+import org.example.medcareappointmentmanager.business.validators.PasswordValidator;
+import org.example.medcareappointmentmanager.business.validators.UsernameValidator;
+import org.example.medcareappointmentmanager.business.validators.Validator;
 import org.example.medcareappointmentmanager.data.User;
 import org.example.medcareappointmentmanager.data.UserType;
 import org.example.medcareappointmentmanager.dataaccess.UserRepository;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,6 +37,13 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private List<Validator> validators = new ArrayList<>();
+
+    public UserService() {
+        validators.add(new UsernameValidator());
+        validators.add(new PasswordValidator());
+    }
+
     public UserDTO login(LoginDTO loginDTO) {
         User user = userRepository.findByUsername(loginDTO.username()).orElse(null);
 
@@ -47,6 +58,10 @@ public class UserService {
         UserType userType = userTypeRepository.findByType(type).orElse(null);
 
         if(userType != null) {
+            for(Validator validator : validators) {
+                validator.validate(userDTO);
+            }
+
             User user = createUserMapper.toEntity(userDTO);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setType(userType);
@@ -55,7 +70,7 @@ public class UserService {
             return userMapper.toDTO(newUser);
         }
 
-        return null;
+        throw new IllegalArgumentException("Usertype not found");
     }
 
     public List<UserDTO> getByType(String type) {

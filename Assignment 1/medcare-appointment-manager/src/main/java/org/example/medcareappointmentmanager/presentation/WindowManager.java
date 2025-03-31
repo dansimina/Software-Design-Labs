@@ -68,6 +68,15 @@ public class WindowManager {
         }
     }
 
+    public void showAdminReportManagementWindow(UserDTO user) {
+        if (user != null && "admin".equals(user.type().type())) {
+            AdminReportController controller = context.getBean(AdminReportController.class);
+            controller.setUser(user);
+            mainFrame.setContentPane(controller.getPanel());
+            refresh();
+        }
+    }
+
     public void showReceptionistAppointmentManagementWindow(UserDTO user) {
         if (user != null && "receptionist".equals(user.type().type())) {
             ReceptionistAppointmentManagementController controller = context.getBean(ReceptionistAppointmentManagementController.class);

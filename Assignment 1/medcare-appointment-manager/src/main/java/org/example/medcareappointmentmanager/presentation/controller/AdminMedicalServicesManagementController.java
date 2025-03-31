@@ -1,5 +1,6 @@
 package org.example.medcareappointmentmanager.presentation.controller;
 
+import org.example.medcareappointmentmanager.business.dto.MedicalServiceDTO;
 import org.example.medcareappointmentmanager.business.dto.UserDTO;
 import org.example.medcareappointmentmanager.business.service.MedicalServiceService;
 import org.example.medcareappointmentmanager.presentation.WindowManager;

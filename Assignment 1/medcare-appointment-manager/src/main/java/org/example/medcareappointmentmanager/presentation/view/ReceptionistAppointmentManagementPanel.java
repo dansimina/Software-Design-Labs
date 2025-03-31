@@ -1,6 +1,7 @@
 package org.example.medcareappointmentmanager.presentation.view;
 
 import org.example.medcareappointmentmanager.business.dto.DoctorDTO;
+import org.example.medcareappointmentmanager.business.dto.MedicalServiceDTO;
 import org.example.medcareappointmentmanager.presentation.controller.ReceptionistAppointmentManagementController;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;

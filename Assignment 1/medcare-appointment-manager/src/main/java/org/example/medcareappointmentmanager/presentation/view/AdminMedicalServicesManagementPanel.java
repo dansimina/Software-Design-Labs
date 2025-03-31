@@ -1,6 +1,7 @@
 
 package org.example.medcareappointmentmanager.presentation.view;
 
+import org.example.medcareappointmentmanager.business.dto.MedicalServiceDTO;
 import org.example.medcareappointmentmanager.presentation.controller.AdminMedicalServicesManagementController;
 
 import javax.swing.*;

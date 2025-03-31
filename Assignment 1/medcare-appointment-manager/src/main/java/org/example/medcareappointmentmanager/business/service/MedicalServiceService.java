@@ -1,5 +1,6 @@
 package org.example.medcareappointmentmanager.business.service;
 
+import org.example.medcareappointmentmanager.business.dto.MedicalServiceDTO;
 import org.example.medcareappointmentmanager.business.mapper.MedicalServiceMapper;
 import org.example.medcareappointmentmanager.business.validators.Validator;
 import org.example.medcareappointmentmanager.data.MedicalService;

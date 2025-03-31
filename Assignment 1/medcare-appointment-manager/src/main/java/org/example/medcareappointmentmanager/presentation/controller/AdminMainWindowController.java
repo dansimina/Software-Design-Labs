@@ -30,7 +30,7 @@ public class AdminMainWindowController extends AbstractController {
             case "managereceptionist" -> windowManager.showAdminReceptionistManagementWindow(user);
             case "managedoctor" -> windowManager.showAdminDoctorManagementWindow(user);
             case "managemedicalservices" -> windowManager.showAdminMedicalServicesManagementWindow(user);
-            case "generatereport" -> windowManager.showMainWindow(user);
+            case "generatereport" -> windowManager.showAdminReportManagementWindow(user);
             case "logout" -> windowManager.showAuthenticationWindow();
         }
     }

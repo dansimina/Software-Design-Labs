@@ -12,7 +12,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -246,8 +248,16 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
         return Time.valueOf(LocalTime.parse((String) Objects.requireNonNull(hourComboBox.getSelectedItem())));
     }
 
-    public Date getSelectedDate() {
-        return (Date) datePicker.getModel().getValue();
+    public LocalDate getSelectedDate() {
+        Date selectedDate = (Date) datePicker.getModel().getValue();
+
+        if (selectedDate == null) {
+            return null;
+        }
+
+        return selectedDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 
     public String getSelectedStatus() {

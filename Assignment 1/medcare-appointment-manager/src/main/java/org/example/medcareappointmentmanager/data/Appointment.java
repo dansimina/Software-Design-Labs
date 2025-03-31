@@ -30,7 +30,8 @@ public class Appointment extends AbstractEntity {
     public Appointment() {
     }
 
-    public Appointment(String patientName, Doctor doctor, MedicalService medicalService, LocalDate date, Time time, AppointmentStatus status) {
+    public Appointment(Long id, String patientName, Doctor doctor, MedicalService medicalService, LocalDate date, Time time, AppointmentStatus status) {
+        this.id = id;
         this.patientName = patientName;
         this.doctor = doctor;
         this.medicalService = medicalService;

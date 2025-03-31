@@ -112,20 +112,17 @@ public class AdminDoctorManagementPanel extends AbstractPanel {
 
 
     private void onSelecting() {
-        doctorTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (e.getValueIsAdjusting()) return;
+        doctorTable.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) return;
 
-                int row = doctorTable.getSelectedRow();
-                if (row == -1) return;
+            int row = doctorTable.getSelectedRow();
+            if (row == -1) return;
 
-                idLabel.setText(doctorTable.getValueAt(row, 0).toString());
-                nameField.setText(doctorTable.getValueAt(row, 1).toString());
-                specField.setText(doctorTable.getValueAt(row, 2).toString());
-                startHourBox.setSelectedItem(doctorTable.getValueAt(row, 3).toString());
-                endHourBox.setSelectedItem(doctorTable.getValueAt(row, 4).toString());
-            }
+            idLabel.setText(doctorTable.getValueAt(row, 0).toString());
+            nameField.setText(doctorTable.getValueAt(row, 1).toString());
+            specField.setText(doctorTable.getValueAt(row, 2).toString());
+            startHourBox.setSelectedItem(doctorTable.getValueAt(row, 3).toString());
+            endHourBox.setSelectedItem(doctorTable.getValueAt(row, 4).toString());
         });
     }
 

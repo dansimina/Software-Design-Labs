@@ -101,19 +101,16 @@ public class AdminMedicalServicesManagementPanel extends AbstractPanel {
     }
 
     private void onSelecting() {
-        servicesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (e.getValueIsAdjusting()) return;
+        servicesTable.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) return;
 
-                int row = servicesTable.getSelectedRow();
-                if (row == -1) return;
+            int row = servicesTable.getSelectedRow();
+            if (row == -1) return;
 
-                idLabel.setText(servicesTable.getValueAt(row, 0).toString());
-                nameField.setText(servicesTable.getValueAt(row, 1).toString());
-                priceField.setText(servicesTable.getValueAt(row, 2).toString());
-                durationBox.setSelectedItem(Integer.parseInt(servicesTable.getValueAt(row, 3).toString()));
-            }
+            idLabel.setText(servicesTable.getValueAt(row, 0).toString());
+            nameField.setText(servicesTable.getValueAt(row, 1).toString());
+            priceField.setText(servicesTable.getValueAt(row, 2).toString());
+            durationBox.setSelectedItem(Integer.parseInt(servicesTable.getValueAt(row, 3).toString()));
         });
     }
 

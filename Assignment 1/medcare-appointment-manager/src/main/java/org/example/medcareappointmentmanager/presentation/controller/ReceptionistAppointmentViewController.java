@@ -1,5 +1,6 @@
 package org.example.medcareappointmentmanager.presentation.controller;
 
+import org.example.medcareappointmentmanager.business.dto.CreateAppointmentDTO;
 import org.example.medcareappointmentmanager.business.dto.UserDTO;
 import org.example.medcareappointmentmanager.business.service.AppointmentService;
 import org.example.medcareappointmentmanager.presentation.WindowManager;
@@ -41,7 +42,8 @@ public class ReceptionistAppointmentViewController extends AbstractController {
         switch (e.getActionCommand()) {
             case "back" -> windowManager.showMainWindow(user);
             case "save" -> {
-
+                appointmentService.save(new CreateAppointmentDTO(panel.getIdLabel(), panel.getPatientLabel(), panel.getDoctorIdLabel(), panel.getServiceIdLabel(), panel.getDateLabel(), panel.getHourLabel(), panel.getSelectedStatus()));
+                panel.updateTable(appointmentService.findAll());
             }
         }
     }

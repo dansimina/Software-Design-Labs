@@ -46,6 +46,7 @@ public class AppointmentService {
                 .orElseThrow(() -> new RuntimeException("Service not found"));
 
         Appointment appointment = new Appointment(
+                dto.id(),
                 dto.patientName(),
                 doctor,
                 service,

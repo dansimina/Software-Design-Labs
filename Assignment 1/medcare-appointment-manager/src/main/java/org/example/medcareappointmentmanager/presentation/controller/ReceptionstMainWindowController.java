@@ -32,6 +32,7 @@ public class ReceptionstMainWindowController extends AbstractController {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
+            case "logout" -> windowManager.showAuthenticationWindow();
             case "registerAppointment" -> windowManager.showReceptionistAppointmentManagementWindow(user);
             case "viewAppointments" -> windowManager.showReceptionistAppointmentViewWindow(user);
         }

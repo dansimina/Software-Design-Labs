@@ -1,6 +1,6 @@
 package org.example.medcareappointmentmanager.business.dto;
 
-import java.sql.Time;
+import java.time.LocalTime;
 
-public record DoctorDTO(Long id, String name, String specialization, Time startOfProgram, Time endOfProgram) {
+public record DoctorDTO(Long id, String name, String specialization, LocalTime startOfProgram, LocalTime endOfProgram) {
 }

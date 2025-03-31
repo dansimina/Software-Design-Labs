@@ -5,7 +5,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +18,10 @@ public class Doctor extends AbstractEntity {
     private String specialization;
 
     @NotNull(message = "Time is required!")
-    private Time startOfProgram;
+    private LocalTime startOfProgram;
 
     @NotNull(message = "Time is required!")
-    private Time endOfProgram;
+    private LocalTime endOfProgram;
 
     @OneToMany(mappedBy = "doctor")
     private List<Appointment> appointments = new ArrayList<>();
@@ -29,7 +29,7 @@ public class Doctor extends AbstractEntity {
     public Doctor() {
     }
 
-    public Doctor(String name, String specialization, Time startOfProgram, Time endOfProgram, List<Appointment> appointments) {
+    public Doctor(String name, String specialization, LocalTime startOfProgram, LocalTime endOfProgram, List<Appointment> appointments) {
         this.name = name;
         this.specialization = specialization;
         this.startOfProgram = startOfProgram;
@@ -53,19 +53,19 @@ public class Doctor extends AbstractEntity {
         this.specialization = specialization;
     }
 
-    public Time getStartOfProgram() {
+    public LocalTime getStartOfProgram() {
         return startOfProgram;
     }
 
-    public void setStartOfProgram(Time startOfProgram) {
+    public void setStartOfProgram(LocalTime startOfProgram) {
         this.startOfProgram = startOfProgram;
     }
 
-    public Time getEndOfProgram() {
+    public LocalTime getEndOfProgram() {
         return endOfProgram;
     }
 
-    public void setEndOfProgram(Time endOfProgram) {
+    public void setEndOfProgram(LocalTime endOfProgram) {
         this.endOfProgram = endOfProgram;
     }
 

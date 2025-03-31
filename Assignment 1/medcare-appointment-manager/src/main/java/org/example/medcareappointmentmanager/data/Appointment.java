@@ -4,8 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 
-import java.sql.Time;
+
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 public class Appointment extends AbstractEntity {
@@ -22,7 +23,7 @@ public class Appointment extends AbstractEntity {
     private LocalDate date;
 
     @NotNull
-    private Time time;
+    private LocalTime time;
 
     @NotNull
     private AppointmentStatus status;
@@ -30,7 +31,7 @@ public class Appointment extends AbstractEntity {
     public Appointment() {
     }
 
-    public Appointment(Long id, String patientName, Doctor doctor, MedicalService medicalService, LocalDate date, Time time, AppointmentStatus status) {
+    public Appointment(Long id, String patientName, Doctor doctor, MedicalService medicalService, LocalDate date, LocalTime time, AppointmentStatus status) {
         this.id = id;
         this.patientName = patientName;
         this.doctor = doctor;
@@ -72,11 +73,11 @@ public class Appointment extends AbstractEntity {
         this.date = date;
     }
 
-    public Time getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 

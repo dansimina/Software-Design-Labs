@@ -34,7 +34,6 @@ public class ReceptionistAppointmentManagementController extends AbstractControl
         this.user = user;
         this.panel = new ReceptionistAppointmentManagementPanel(this);
         this.panel.updateTable(doctorService.findAll(), medicalServiceService.findAll());
-        this.panel.setError("ceva");
     }
 
     @Override

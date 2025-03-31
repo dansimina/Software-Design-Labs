@@ -9,7 +9,9 @@ import java.awt.*;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 public class ReceptionistAppointmentViewPanel extends AbstractPanel {
     private final ReceptionistAppointmentViewController controller;
@@ -59,7 +61,6 @@ public class ReceptionistAppointmentViewPanel extends AbstractPanel {
         topPanel.add(statusPanel, BorderLayout.NORTH);
         topPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Detail panel
         JPanel detailPanel = new JPanel(new GridLayout(5, 4, 10, 5));
         detailPanel.setBackground(BACKGROUND_COLOR);
         detailPanel.setBorder(BorderFactory.createTitledBorder("Selected Appointment Details"));
@@ -196,8 +197,9 @@ public class ReceptionistAppointmentViewPanel extends AbstractPanel {
         return LocalDate.parse(dateLabel.getText());
     }
 
-    public Time getHourLabel() {
-        return Time.valueOf(hourLabel.getText());
+    public LocalTime getHourLabel() {
+        return LocalTime.parse((String) Objects.requireNonNull(hourLabel.getText()));
+
     }
 
 }

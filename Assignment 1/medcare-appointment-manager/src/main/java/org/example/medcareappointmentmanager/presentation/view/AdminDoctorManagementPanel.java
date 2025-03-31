@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
@@ -171,11 +172,11 @@ public class AdminDoctorManagementPanel extends AbstractPanel {
         return specField.getText();
     }
 
-    public Time getStartHour() {
-        return Time.valueOf(LocalTime.parse((String) Objects.requireNonNull(startHourBox.getSelectedItem())));
+    public LocalTime getStartHour() {
+        return LocalTime.parse((String) Objects.requireNonNull(startHourBox.getSelectedItem()));
     }
 
-    public Time getEndHour() {
-        return Time.valueOf(LocalTime.parse((String) Objects.requireNonNull(endHourBox.getSelectedItem())));
+    public LocalTime getEndHour() {
+        return LocalTime.parse((String) Objects.requireNonNull(endHourBox.getSelectedItem()));
     }
 }

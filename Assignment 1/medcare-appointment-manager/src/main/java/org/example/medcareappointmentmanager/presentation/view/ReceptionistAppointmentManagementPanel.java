@@ -249,15 +249,15 @@ public class ReceptionistAppointmentManagementPanel extends AbstractPanel {
     }
 
     public LocalDate getSelectedDate() {
-        Date selectedDate = (Date) datePicker.getModel().getValue();
-
-        if (selectedDate == null) {
+        if (!datePicker.getModel().isSelected()) {
             return null;
         }
 
-        return selectedDate.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+        int year = datePicker.getModel().getYear();
+        int month = datePicker.getModel().getMonth();
+        int day = datePicker.getModel().getDay();
+
+        return LocalDate.of(year, month + 1, day);
     }
 
     public String getSelectedStatus() {

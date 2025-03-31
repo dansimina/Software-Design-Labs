@@ -13,6 +13,9 @@ import org.example.medcareappointmentmanager.dataaccess.MedicalServiceRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,5 +58,48 @@ public class ReportService {
         }
 
         return medicalServicesReport;
+    }
+
+    public void exportAppointmentsToCsv(String filePath, List<AppointmentDTO> appointments, List<DoctorReportDTO> doctors, List<MedicalServiceReportDTO> medicalServices) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+            writer.println("ID,Patient,Doctor,Service,Date,Time,Status");
+
+            for (AppointmentDTO appt : appointments) {
+                writer.printf("%d,%s,%s,%s,%s,%s,%s%n",
+                        appt.id(),
+                        appt.patientName(),
+                        appt.doctor().name(),
+                        appt.medicalService().name(),
+                        appt.date(),
+                        appt.time(),
+                        appt.status()
+                );
+            }
+
+            writer.println();
+
+            writer.println("ID, Doctor Name, No. of Appointments");
+            for (DoctorReportDTO doctor : doctors) {
+                writer.printf("%d,%s,%d%n",
+                        doctor.id(),
+                        doctor.name(),
+                        doctor.noOfAppointments()
+                        );
+            }
+
+            writer.println();
+
+            writer.println("ID, Service Name, No. of Appointments");
+            for (MedicalServiceReportDTO service : medicalServices) {
+                writer.printf("%d,%s,%d%n",
+                        service.id(),
+                        service.name(),
+                        service.noOfAppointments()
+                );
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

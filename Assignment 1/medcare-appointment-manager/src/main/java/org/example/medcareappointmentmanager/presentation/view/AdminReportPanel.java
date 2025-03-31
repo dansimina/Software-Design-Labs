@@ -16,8 +16,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -163,7 +161,7 @@ public class AdminReportPanel extends AbstractPanel {
         }
 
         int year = startDatePicker.getModel().getYear();
-        int month = startDatePicker.getModel().getMonth();  // zero-based!
+        int month = startDatePicker.getModel().getMonth();
         int day = startDatePicker.getModel().getDay();
 
         return LocalDate.of(year, month + 1, day);

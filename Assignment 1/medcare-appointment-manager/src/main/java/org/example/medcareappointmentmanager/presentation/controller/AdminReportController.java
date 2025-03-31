@@ -31,7 +31,9 @@ public class AdminReportController extends AbstractController {
                 panel.updateTableDoctors(reportService.getDoctorsReport(panel.getStartDate(), panel.getEndDate()));
                 panel.updateTableMedicalServices(reportService.getMedicalServicesReport(panel.getStartDate(), panel.getEndDate()));
             }
-            case "export" -> {}
+            case "export" -> {
+                reportService.exportAppointmentsToCsv("report.csv", reportService.getAppointmentsReport(panel.getStartDate(), panel.getEndDate()), reportService.getDoctorsReport(panel.getStartDate(), panel.getEndDate()), reportService.getMedicalServicesReport(panel.getStartDate(), panel.getEndDate()));
+            }
         }
     }
 

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -46,6 +47,8 @@ public class ReportService {
             doctorsReport.add(new DoctorReportDTO(doctor.getId(), doctor.getName(), appointmentRepository.countByDoctorId(doctor.getId(), startDate, endDate)));
         }
 
+        doctorsReport.sort(Comparator.comparing(DoctorReportDTO::noOfAppointments).reversed());
+
         return doctorsReport;
     }
 
@@ -56,6 +59,8 @@ public class ReportService {
         for(MedicalService medicalService : medicalServices) {
             medicalServicesReport.add(new MedicalServiceReportDTO(medicalService.getId(), medicalService.getName(), appointmentRepository.countByMedicalServiceIdId(medicalService.getId(), startDate, endDate)));
         }
+
+        medicalServicesReport.sort(Comparator.comparing(MedicalServiceReportDTO::noOfAppointments).reversed());
 
         return medicalServicesReport;
     }

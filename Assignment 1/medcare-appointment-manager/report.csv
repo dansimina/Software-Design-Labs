@@ -1,0 +1,19 @@
+ID,Patient,Doctor,Service,Date,Time,Status
+1,Marcel,Doctor2,serviciu1,2025-03-20,09:30,COMPLETED
+2,altceva,Doctor3,serviciu1,2025-03-22,08:00,ONGOING
+52,zlt,Doctor2,serviciu1,2025-04-10,08:00,New
+102,pacient3,Doctor3,serviciu2,2025-04-17,10:30,ONGOING
+103,pacient5,Doctor3,serviciu2,2025-04-17,11:30,New
+152,pacient test,Ceva,serviciu2,2025-04-16,08:00,New
+
+ID, Doctor Name, No. of Appointments
+2,Doctor2,2
+202,Doctor3,2
+52,Doctor3,1
+102,Ceva,1
+1,Doctor1,0
+
+ID, Service Name, No. of Appointments
+1,serviciu1,3
+52,serviciu2,3
+53,serviciu3213,0

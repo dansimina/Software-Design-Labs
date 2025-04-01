@@ -40,7 +40,7 @@ public class UserService {
     private List<Validator> validators = new ArrayList<>();
 
     public UserService() {
-        validators.add(new UsernameValidator());
+        validators.add(new UsernameValidator(this));
         validators.add(new PasswordValidator());
     }
 
@@ -83,4 +83,7 @@ public class UserService {
         return userMapper.toDTO(users);
     }
 
+    public List<UserDTO> getByUsername(String username) {
+        return userMapper.toDTO(userRepository.findUsersByUsername(username).orElse(Collections.emptyList()));
+    }
 }

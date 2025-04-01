@@ -51,7 +51,6 @@ public class AdminMedicalServicesManagementPanel extends AbstractPanel {
         errorLabel.setForeground(Color.RED);
         errorLabel.setVisible(false);
 
-        // === Form Panel ===
         JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
         formPanel.setBackground(BACKGROUND_COLOR);
         nameField = new JTextField();

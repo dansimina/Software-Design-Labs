@@ -1,17 +1,13 @@
 package org.example.medcareappointmentmanager.presentation;
 
-import org.example.medcareappointmentmanager.business.dto.CreateUserDTO;
-import org.example.medcareappointmentmanager.business.dto.DoctorDTO;
-import org.example.medcareappointmentmanager.business.dto.UserDTO;
-import org.example.medcareappointmentmanager.business.service.DoctorService;
-import org.example.medcareappointmentmanager.business.service.UserService;
+import org.example.medcareappointmentmanager.business.dto.*;
+import org.example.medcareappointmentmanager.business.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,6 +18,12 @@ public class AdminController {
 
     @Autowired
     private DoctorService doctorService;
+
+    @Autowired
+    private MedicalServiceService medicalServiceService;
+
+    @Autowired
+    private ReportService reportService;
 
     @GetMapping("/receptionists")
     public ResponseEntity<List<UserDTO>> getAllReceptionists() {
@@ -54,5 +56,40 @@ public class AdminController {
         catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/services")
+    public ResponseEntity<List<MedicalServiceDTO>> getAllMedicalServices() {
+        List<MedicalServiceDTO> services = medicalServiceService.findAll();
+        return new ResponseEntity<>(services, HttpStatus.OK);
+    }
+
+    @PostMapping("/services")
+    public ResponseEntity<MedicalServiceDTO> createMedicalService(@RequestBody MedicalServiceDTO medicalServiceDTO) {
+        try {
+            MedicalServiceDTO medicalService = medicalServiceService.save(medicalServiceDTO);
+            return new ResponseEntity<>(medicalService, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/appointments")
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointments(@RequestBody DateIntervalDTO dateInterval) {
+        List<AppointmentDTO> appointments = reportService.getAppointmentsReport(dateInterval);
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
+
+    @PostMapping("/doctors/report")
+    public ResponseEntity<List<DoctorReportDTO>> getAllDoctorReports(@RequestBody DateIntervalDTO dateInterval) {
+        List<DoctorReportDTO> doctorReport = reportService.getDoctorsReport(dateInterval);
+        return new ResponseEntity<>(doctorReport, HttpStatus.OK);
+    }
+
+    @PostMapping("/services/report")
+    public ResponseEntity<List<MedicalServiceReportDTO>> getAllServiceReports(@RequestBody DateIntervalDTO dateInterval) {
+        List<MedicalServiceReportDTO> medicalServiceReport = reportService.getMedicalServicesReport(dateInterval);
+        return new ResponseEntity<>(medicalServiceReport, HttpStatus.OK);
     }
 }

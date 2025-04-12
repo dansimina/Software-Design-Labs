@@ -1,6 +1,7 @@
 package org.example.medcareappointmentmanager.business.service;
 
 import org.example.medcareappointmentmanager.business.dto.AppointmentDTO;
+import org.example.medcareappointmentmanager.business.dto.DateIntervalDTO;
 import org.example.medcareappointmentmanager.business.dto.DoctorReportDTO;
 import org.example.medcareappointmentmanager.business.dto.MedicalServiceReportDTO;
 import org.example.medcareappointmentmanager.business.mapper.AppointmentMapper;
@@ -35,16 +36,16 @@ public class ReportService {
     @Autowired
     private AppointmentMapper appointmentMapper;
 
-    public List<AppointmentDTO> getAppointmentsReport(LocalDate startDate, LocalDate endDate) {
-        return appointmentMapper.toDTO((List<Appointment>) appointmentRepository.findBetweenDates(startDate, endDate));
+    public List<AppointmentDTO> getAppointmentsReport(DateIntervalDTO dateInterval) {
+        return appointmentMapper.toDTO((List<Appointment>) appointmentRepository.findBetweenDates(dateInterval.start(), dateInterval.end()));
     }
 
-    public List<DoctorReportDTO> getDoctorsReport(LocalDate startDate, LocalDate endDate) {
+    public List<DoctorReportDTO> getDoctorsReport(DateIntervalDTO dateInterval) {
         List<DoctorReportDTO> doctorsReport= new ArrayList<>();
         List<Doctor> doctors = doctorRepository.findAll();
 
         for (Doctor doctor : doctors) {
-            doctorsReport.add(new DoctorReportDTO(doctor.getId(), doctor.getName(), appointmentRepository.countByDoctorId(doctor.getId(), startDate, endDate)));
+            doctorsReport.add(new DoctorReportDTO(doctor.getId(), doctor.getName(), appointmentRepository.countByDoctorId(doctor.getId(), dateInterval.start(), dateInterval.end())));
         }
 
         doctorsReport.sort(Comparator.comparing(DoctorReportDTO::noOfAppointments).reversed());
@@ -52,12 +53,12 @@ public class ReportService {
         return doctorsReport;
     }
 
-    public List<MedicalServiceReportDTO> getMedicalServicesReport(LocalDate startDate, LocalDate endDate) {
+    public List<MedicalServiceReportDTO> getMedicalServicesReport(DateIntervalDTO dateInterval) {
         List<MedicalServiceReportDTO> medicalServicesReport= new ArrayList<>();
         List<MedicalService> medicalServices = medicalServiceRepository.findAll();
 
         for(MedicalService medicalService : medicalServices) {
-            medicalServicesReport.add(new MedicalServiceReportDTO(medicalService.getId(), medicalService.getName(), appointmentRepository.countByMedicalServiceIdId(medicalService.getId(), startDate, endDate)));
+            medicalServicesReport.add(new MedicalServiceReportDTO(medicalService.getId(), medicalService.getName(), appointmentRepository.countByMedicalServiceIdId(medicalService.getId(), dateInterval.start(), dateInterval.end())));
         }
 
         medicalServicesReport.sort(Comparator.comparing(MedicalServiceReportDTO::noOfAppointments).reversed());

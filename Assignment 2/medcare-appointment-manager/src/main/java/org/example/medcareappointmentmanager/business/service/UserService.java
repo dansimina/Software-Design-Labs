@@ -3,7 +3,6 @@ package org.example.medcareappointmentmanager.business.service;
 import org.example.medcareappointmentmanager.business.dto.CreateUserDTO;
 import org.example.medcareappointmentmanager.business.dto.LoginDTO;
 import org.example.medcareappointmentmanager.business.dto.UserDTO;
-import org.example.medcareappointmentmanager.business.mapper.CreateUserMapper;
 import org.example.medcareappointmentmanager.business.mapper.UserMapper;
 import org.example.medcareappointmentmanager.business.validators.PasswordValidator;
 import org.example.medcareappointmentmanager.business.validators.UsernameValidator;
@@ -32,9 +31,6 @@ public class UserService {
     private UserMapper userMapper;
 
     @Autowired
-    private CreateUserMapper createUserMapper;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private List<Validator> validators = new ArrayList<>();
@@ -54,16 +50,18 @@ public class UserService {
         return null;
     }
 
-    public UserDTO save(CreateUserDTO userDTO, String type) {
-        UserType userType = userTypeRepository.findByType(type).orElse(null);
+    public UserDTO save(CreateUserDTO userDTO) throws Exception {
+        UserType userType = userTypeRepository.findByType(userDTO.type()).orElse(null);
 
         if(userType != null) {
             for(Validator validator : validators) {
                 validator.validate(userDTO);
             }
 
-            User user = createUserMapper.toEntity(userDTO);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            User user = new User();
+            user.setName(userDTO.name());
+            user.setUsername(userDTO.username());
+            user.setPassword(passwordEncoder.encode(userDTO.password()));
             user.setType(userType);
 
             User newUser = userRepository.save(user);

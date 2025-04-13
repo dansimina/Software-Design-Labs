@@ -22,7 +22,11 @@ function ReceptionistWindow() {
     <div className="container mt-5">
       <WelcomeMessage {...user} />
       <div className="d-flex justify-content-center mb-4">
-        <div className="btn-group" role="group" aria-label="Navigation">
+        <div
+          className="btn-group btn-group-lg w-100"
+          role="group"
+          aria-label="Navigation"
+        >
           <button
             type="button"
             className={`btn btn-primary ${

@@ -85,7 +85,6 @@ function ReceptionistViewAppointments() {
   return (
     <div className="container mt-4" style={{ fontFamily: "Arial, sans-serif" }}>
       <h1 className="text-center text-success mb-4">Appointments</h1>
-
       <div className="mb-4">
         <h4>Edit Appointment Status</h4>
         <div className="form-group">

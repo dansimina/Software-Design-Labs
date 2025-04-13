@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface TableProps<T> {
   data: Array<T>;
   columns: Array<{ header: string; accessor: keyof T }>;
@@ -5,6 +7,15 @@ interface TableProps<T> {
 }
 
 export function Table<T>({ data, columns, onRowClick }: TableProps<T>) {
+  const [selectedRowIndex, setSelectedRowIndex] = useState<number | null>(null);
+
+  const handleRowClick = (row: T, index: number) => {
+    setSelectedRowIndex(index);
+    if (onRowClick) {
+      onRowClick(row);
+    }
+  };
+
   return (
     <div className="table-responsive mx-auto" style={{ maxWidth: "600px" }}>
       <table className="table table-bordered">
@@ -19,7 +30,8 @@ export function Table<T>({ data, columns, onRowClick }: TableProps<T>) {
           {data.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              onClick={() => onRowClick && onRowClick(row)}
+              onClick={() => handleRowClick(row, rowIndex)}
+              className={selectedRowIndex === rowIndex ? "table-primary" : ""}
               style={{ cursor: onRowClick ? "pointer" : "default" }}
             >
               {columns.map((column, colIndex) => (

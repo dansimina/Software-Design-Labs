@@ -1,6 +1,8 @@
 package org.example.medcareappointmentmanager.presentation;
 
 import org.example.medcareappointmentmanager.business.dto.AppointmentDTO;
+import org.example.medcareappointmentmanager.business.dto.DoctorDTO;
+import org.example.medcareappointmentmanager.business.dto.MedicalServiceDTO;
 import org.example.medcareappointmentmanager.business.service.AppointmentService;
 import org.example.medcareappointmentmanager.business.service.DoctorService;
 import org.example.medcareappointmentmanager.business.service.MedicalServiceService;
@@ -22,6 +24,18 @@ public class ReceptionistController {
 
     @Autowired
     private MedicalServiceService medicalServiceService;
+
+    @GetMapping("/doctors")
+    public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
+        List<DoctorDTO> doctors = doctorService.findAll();
+        return new ResponseEntity<>(doctors, HttpStatus.OK);
+    }
+
+    @GetMapping("/services")
+    public ResponseEntity<List<MedicalServiceDTO>> getAllMedicalServices() {
+        List<MedicalServiceDTO> services = medicalServiceService.findAll();
+        return new ResponseEntity<>(services, HttpStatus.OK);
+    }
 
     @GetMapping("appointments")
     public ResponseEntity<List<AppointmentDTO>> getAppointments() {

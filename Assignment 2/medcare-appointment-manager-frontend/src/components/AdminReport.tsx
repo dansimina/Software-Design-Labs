@@ -114,6 +114,17 @@ function AdminReport() {
         </div>
       </div>
 
+      <div className="mb-4 text-center">
+        <button
+          className="btn btn-primary w-100"
+          onClick={() => {
+            console.log("Export button clicked");
+          }}
+        >
+          Export Report
+        </button>
+      </div>
+
       {error && <div className="alert alert-danger">{error}</div>}
 
       <div className="table-responsive mb-4">

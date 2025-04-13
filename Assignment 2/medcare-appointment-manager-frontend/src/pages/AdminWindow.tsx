@@ -5,8 +5,10 @@ import AdminMedicalServicesManagement from "../components/AdminMedicalServicesMa
 import AdminReport from "../components/AdminReport";
 import AdminReceptionistManagement from "../components/AdminReceptionistManagement";
 import { useNavigate } from "react-router-dom";
+import WelcomeMessage from "../components/WelcomeMessage";
 
 function AdminWindow() {
+  const navigate = useNavigate();
   const userString = localStorage.getItem("user");
   const user: UserDTO | null = userString ? JSON.parse(userString) : null;
 
@@ -14,26 +16,13 @@ function AdminWindow() {
     return <div>Error: User not found. Please log in again.</div>;
   }
 
-  const { id, name, username, type } = user;
   const [activeSection, setActiveSection] = useState<
     "receptionist" | "doctor" | "service" | "report"
   >("report");
-  const navigate = useNavigate();
 
   return (
     <div className="container mt-5">
-      <div className="text-center mb-5">
-        <h1 className="display-4 fw-bold text-primary">Welcome, {name}</h1>
-        <p className="text-muted">
-          User ID: <span className="fw-semibold">{id}</span>
-        </p>
-        <p className="text-muted">
-          Username: <span className="fw-semibold">{username}</span>
-        </p>
-        <p className="text-muted">
-          Type: <span className="fw-semibold">{type.type}</span>
-        </p>
-      </div>
+      <WelcomeMessage {...user} />
       <div className="d-flex justify-content-center mb-4">
         <div className="btn-group" role="group" aria-label="Navigation">
           <button
@@ -83,11 +72,11 @@ function AdminWindow() {
         </div>
       </div>
       <button
-        className="btn btn-danger position-fixed bottom-0 end-0 m-3"
+        className="btn btn-danger position-absolute top-0 end-0 m-3"
         onClick={() => {
           localStorage.removeItem("user");
-          navigate("/login"); // Redirect to login page
-          window.location.reload(); // Reload the page to clear any cached data
+          navigate("/login");
+          window.location.reload();
         }}
       >
         Logout

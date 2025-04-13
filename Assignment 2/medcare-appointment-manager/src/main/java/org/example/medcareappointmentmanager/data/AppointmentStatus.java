@@ -1,7 +1,7 @@
 package org.example.medcareappointmentmanager.data;
 
 public enum AppointmentStatus {
-    New("new"),
+    NEW("new"),
     ONGOING("ongoing"),
     COMPLETED("completed");
 

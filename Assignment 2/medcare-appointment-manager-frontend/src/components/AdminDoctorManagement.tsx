@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { DoctorDTO } from "../types/DoctorDTO";
 import api from "../api";
+import React from "react";
+import Table from "./Table";
 
 export function AdminDoctorManagement() {
   const [doctors, setDoctors] = useState<Array<DoctorDTO>>([]);
@@ -77,30 +79,17 @@ export function AdminDoctorManagement() {
     <div className="container mt-4" style={{ fontFamily: "Arial, sans-serif" }}>
       <h1 className="text-center text-success mb-4">Admin Doctor Management</h1>
 
-      <div className="table-responsive mx-auto" style={{ maxWidth: "600px" }}>
-        <table className="table table-bordered">
-          <thead className="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Specialization</th>
-              <th>Start of Program</th>
-              <th>End of Program</th>
-            </tr>
-          </thead>
-          <tbody>
-            {doctors.map((doctor) => (
-              <tr key={doctor.id} onClick={() => handleSelectDoctor(doctor)}>
-                <td>{doctor.id}</td>
-                <td>{doctor.name}</td>
-                <td>{doctor.specialization}</td>
-                <td>{doctor.startOfProgram}</td>
-                <td>{doctor.endOfProgram}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Table
+        data={doctors}
+        columns={[
+          { header: "ID", accessor: "id" },
+          { header: "Name", accessor: "name" },
+          { header: "Specialization", accessor: "specialization" },
+          { header: "Start of Program", accessor: "startOfProgram" },
+          { header: "End of Program", accessor: "endOfProgram" },
+        ]}
+        onRowClick={handleSelectDoctor}
+      />
 
       <form
         className="row g-3"

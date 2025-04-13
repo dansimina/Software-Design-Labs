@@ -27,6 +27,8 @@ function Login() {
 
       if (response.data.type.type === "admin") {
         navigate("/admin");
+      } else if (response.data.type.type === "receptionist") {
+        navigate("/receptionist");
       } else {
         navigate("/user");
       }

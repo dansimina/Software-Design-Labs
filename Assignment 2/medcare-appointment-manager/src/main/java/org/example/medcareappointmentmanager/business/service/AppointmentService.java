@@ -40,22 +40,8 @@ public class AppointmentService {
         validators.add(new AppointmentValidator());
     }
 
-    public AppointmentDTO save(CreateAppointmentDTO dto) {
-        Doctor doctor = doctorRepository.findById(dto.doctorId())
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
-
-        MedicalService service = medicalServiceRepository.findById(dto.serviceId())
-                .orElseThrow(() -> new RuntimeException("Service not found"));
-
-        Appointment appointment = new Appointment(
-                dto.id(),
-                dto.patientName(),
-                doctor,
-                service,
-                dto.date(),
-                dto.time(),
-                AppointmentStatus.fromDisplayName(dto.status())
-        );
+    public AppointmentDTO save(AppointmentDTO dto) {
+        Appointment appointment = appointmentMapper.toEntity(dto);
 
         for(Validator validator : validators){
             validator.validate(appointment);

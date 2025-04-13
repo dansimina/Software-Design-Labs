@@ -73,6 +73,27 @@ function AdminReport() {
     fetchServiceReport();
   }, [dateInterval]);
 
+  async function handleExportReport(): Promise<void> {
+    try {
+      const response = await api.post("/admin/export/report", dateInterval, {
+        responseType: "blob",
+      });
+
+      const blob = new Blob([response.data], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "report.csv";
+      link.click();
+
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Export failed", error);
+      setError("Failed to export report.");
+    }
+  }
+
   return (
     <div className="container mt-4" style={{ fontFamily: "Arial, sans-serif" }}>
       <h1 className="text-center text-success mb-4">Admin Report</h1>
@@ -115,12 +136,7 @@ function AdminReport() {
       </div>
 
       <div className="mb-4 text-center">
-        <button
-          className="btn btn-primary w-100"
-          onClick={() => {
-            console.log("Export button clicked");
-          }}
-        >
+        <button className="btn btn-primary w-100" onClick={handleExportReport}>
           Export Report
         </button>
       </div>

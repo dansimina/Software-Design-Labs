@@ -14,9 +14,8 @@ import org.example.medcareappointmentmanager.dataaccess.MedicalServiceRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -66,8 +65,13 @@ public class ReportService {
         return medicalServicesReport;
     }
 
-    public void exportAppointmentsToCsv(String filePath, List<AppointmentDTO> appointments, List<DoctorReportDTO> doctors, List<MedicalServiceReportDTO> medicalServices) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+    public byte[] generateAppointmentsCsvContent(List<AppointmentDTO> appointments,
+                                                 List<DoctorReportDTO> doctors,
+                                                 List<MedicalServiceReportDTO> medicalServices) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             OutputStreamWriter osw = new OutputStreamWriter(baos, StandardCharsets.UTF_8);
+             PrintWriter writer = new PrintWriter(osw)) {
+
             writer.println("ID,Patient,Doctor,Service,Date,Time,Status");
 
             for (AppointmentDTO appt : appointments) {
@@ -78,34 +82,26 @@ public class ReportService {
                         appt.medicalService().name(),
                         appt.date(),
                         appt.time(),
-                        appt.status()
-                );
+                        appt.status());
             }
 
             writer.println();
-
-            writer.println("ID, Doctor Name, No. of Appointments");
+            writer.println("ID,Doctor Name,No. of Appointments");
             for (DoctorReportDTO doctor : doctors) {
-                writer.printf("%d,%s,%d%n",
-                        doctor.id(),
-                        doctor.name(),
-                        doctor.noOfAppointments()
-                        );
+                writer.printf("%d,%s,%d%n", doctor.id(), doctor.name(), doctor.noOfAppointments());
             }
 
             writer.println();
-
-            writer.println("ID, Service Name, No. of Appointments");
+            writer.println("ID,Service Name,No. of Appointments");
             for (MedicalServiceReportDTO service : medicalServices) {
-                writer.printf("%d,%s,%d%n",
-                        service.id(),
-                        service.name(),
-                        service.noOfAppointments()
-                );
+                writer.printf("%d,%s,%d%n", service.id(), service.name(), service.noOfAppointments());
             }
+
+            writer.flush();
+            return baos.toByteArray();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to generate CSV", e);
         }
     }
 }

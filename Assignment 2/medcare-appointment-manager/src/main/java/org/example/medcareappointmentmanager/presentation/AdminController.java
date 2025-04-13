@@ -4,7 +4,9 @@ import org.example.medcareappointmentmanager.business.dto.*;
 import org.example.medcareappointmentmanager.business.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,4 +94,24 @@ public class AdminController {
         List<MedicalServiceReportDTO> medicalServiceReport = reportService.getMedicalServicesReport(dateInterval);
         return new ResponseEntity<>(medicalServiceReport, HttpStatus.OK);
     }
+
+    @PostMapping("/export/report")
+    public ResponseEntity<byte[]> exportReport(@RequestBody DateIntervalDTO dateInterval) {
+        try {
+            List<DoctorReportDTO> doctorReport = reportService.getDoctorsReport(dateInterval);
+            List<MedicalServiceReportDTO> medicalServiceReport = reportService.getMedicalServicesReport(dateInterval);
+            List<AppointmentDTO> appointments = reportService.getAppointmentsReport(dateInterval);
+
+            byte[] csvData = reportService.generateAppointmentsCsvContent(appointments, doctorReport, medicalServiceReport);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.csv")
+                    .contentType(MediaType.parseMediaType("text/csv"))
+                    .body(csvData);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { DoctorDTO } from "../types/DoctorDTO";
-import Table from "./Table";
 import { MedicalServiceDTO } from "../types/MedicalServiceDTO";
 import api from "../api";
 import { AppointmentDTO } from "../types/AppointmentDTO";
@@ -95,11 +94,11 @@ function ReceptionistCreateAppointment() {
     }
   };
 
-  const handleDoctorSelect = (doctor: DoctorDTO) => {
+  const handleSelectDoctor = (doctor: DoctorDTO) => {
     setSelectedDoctor(doctor);
   };
 
-  const handleServiceSelect = (service: MedicalServiceDTO) => {
+  const handleSelectService = (service: MedicalServiceDTO) => {
     setSelectedService(service);
   };
 
@@ -256,31 +255,67 @@ function ReceptionistCreateAppointment() {
 
       <div className="mt-5">
         <h4>Select a Doctor</h4>
-        <Table
-          data={doctors}
-          columns={[
-            { header: "ID", accessor: "id" },
-            { header: "Name", accessor: "name" },
-            { header: "Specialization", accessor: "specialization" },
-            { header: "Start Time", accessor: "startOfProgram" },
-            { header: "End Time", accessor: "endOfProgram" },
-          ]}
-          onRowClick={handleDoctorSelect}
-        />
+        <div className="table-responsive mx-auto" style={{ maxWidth: "600px" }}>
+          <table className="table table-bordered">
+            <thead className="thead-light">
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Specialization</th>
+                <th>Start of Program</th>
+                <th>End of Program</th>
+              </tr>
+            </thead>
+            <tbody>
+              {doctors.map((doctor) => (
+                <tr
+                  key={doctor.id}
+                  onClick={() => handleSelectDoctor(doctor)}
+                  className={
+                    selectedDoctor?.id === doctor.id ? "table-primary" : ""
+                  }
+                  style={{ cursor: "pointer" }}
+                >
+                  <td>{doctor.id}</td>
+                  <td>{doctor.name}</td>
+                  <td>{doctor.specialization}</td>
+                  <td>{doctor.startOfProgram}</td>
+                  <td>{doctor.endOfProgram}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div className="mt-5 mb-5">
-        <h4>Select a Service</h4>
-        <Table
-          data={services}
-          columns={[
-            { header: "ID", accessor: "id" },
-            { header: "Name", accessor: "name" },
-            { header: "Price", accessor: "price" },
-            { header: "Duration (minutes)", accessor: "duration" },
-          ]}
-          onRowClick={handleServiceSelect}
-        />
+      <div className="table-responsive mx-auto" style={{ maxWidth: "600px" }}>
+        <table className="table table-bordered">
+          <thead className="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Duration (minutes)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {services.map((service) => (
+              <tr
+                key={service.id}
+                onClick={() => handleSelectService(service)}
+                className={
+                  selectedService?.id === service.id ? "table-primary" : ""
+                }
+                style={{ cursor: "pointer" }}
+              >
+                <td>{service.id}</td>
+                <td>{service.name}</td>
+                <td>{service.price}</td>
+                <td>{service.duration}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

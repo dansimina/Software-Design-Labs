@@ -1,7 +1,6 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MedicalServiceDTO } from "../types/MedicalServiceDTO";
 import api from "../api";
-import Table from "./Table";
 
 function AdminMedicalServicesManagement() {
   const [services, setServices] = useState<Array<MedicalServiceDTO>>([]);
@@ -69,16 +68,33 @@ function AdminMedicalServicesManagement() {
         Admin Medical Services Management
       </h1>
 
-      <Table
-        data={services}
-        columns={[
-          { header: "ID", accessor: "id" },
-          { header: "Name", accessor: "name" },
-          { header: "Price", accessor: "price" },
-          { header: "Duration (minutes)", accessor: "duration" },
-        ]}
-        onRowClick={handleSelectService}
-      />
+      <div className="table-responsive mx-auto" style={{ maxWidth: "600px" }}>
+        <table className="table table-bordered">
+          <thead className="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Duration (minutes)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {services.map((service) => (
+              <tr
+                key={service.id}
+                onClick={() => handleSelectService(service)}
+                className={id === service.id ? "table-primary" : ""}
+                style={{ cursor: "pointer" }}
+              >
+                <td>{service.id}</td>
+                <td>{service.name}</td>
+                <td>{service.price}</td>
+                <td>{service.duration}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <form
         className="row g-3"

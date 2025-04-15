@@ -55,16 +55,28 @@ function AdminReceptionistManagement() {
         Admin Receptionist Management
       </h1>
 
-      <Table
-        data={receptionists}
-        columns={[
-          { header: "ID", accessor: "id" },
-          { header: "Name", accessor: "name" },
-          { header: "Username", accessor: "username" },
-          { header: "Type", accessor: "type" },
-        ]}
-        onRowClick={undefined}
-      />
+      <div className="table-responsive mx-auto" style={{ maxWidth: "600px" }}>
+        <table className="table table-bordered">
+          <thead className="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {receptionists.map((receptionist, rowIndex) => (
+              <tr key={rowIndex}>
+                <td>{receptionist.id}</td>
+                <td>{receptionist.name}</td>
+                <td>{receptionist.username}</td>
+                <td>{receptionist.type.type}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <form
         className="row g-3"

@@ -56,8 +56,15 @@ public class AdminController {
             return new ResponseEntity<>(doctor, HttpStatus.OK);
         }
         catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/doctors/delete")
+    public ResponseEntity<String> deleteDoctor(@RequestBody DoctorDTO doctorDTO) {
+        doctorService.delete(doctorDTO);
+        return new ResponseEntity<>("Doctor deleted", HttpStatus.OK);
     }
 
     @GetMapping("/services")
@@ -75,6 +82,12 @@ public class AdminController {
         catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/services/delete")
+    public ResponseEntity<String> deleteMedicalService(@RequestBody MedicalServiceDTO medicalServiceDTO) {
+        medicalServiceService.delete(medicalServiceDTO);
+        return new ResponseEntity<>("Medical service deleted", HttpStatus.OK);
     }
 
     @PostMapping("/appointments")

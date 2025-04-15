@@ -5,11 +5,12 @@ import React from "react";
 
 export function AdminDoctorManagement() {
   const [doctors, setDoctors] = useState<Array<DoctorDTO>>([]);
+  const [selectedDoctor, setSelectedDoctor] = useState<DoctorDTO | null>(null);
   const [id, setId] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [specialization, setSpecialization] = useState("");
-  const [startOfProgram, setStartOfProgram] = useState("");
-  const [endOfProgram, setEndOfProgram] = useState("");
+  const [startOfProgram, setStartOfProgram] = useState("07:00");
+  const [endOfProgram, setEndOfProgram] = useState("07:30");
   const [error, setError] = useState("");
 
   const fetchDoctors = async () => {
@@ -27,6 +28,11 @@ export function AdminDoctorManagement() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!startOfProgram || !endOfProgram) {
+      setError("Start and End of Program cannot be empty.");
+      return;
+    }
 
     try {
       const newDoctor: DoctorDTO = {
@@ -53,63 +59,42 @@ export function AdminDoctorManagement() {
     setId(doctor.id);
     setName(doctor.name);
     setSpecialization(doctor.specialization);
-
-    const formatTime = (timeStr: string) => {
-      if (!timeStr) return "";
-      // Parse the time and ensure it's in the "HH:MM" format
-      const [hours, minutes] = timeStr.split(":");
-      return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
-    };
-
-    setStartOfProgram(formatTime(doctor.startOfProgram));
-    setEndOfProgram(formatTime(doctor.endOfProgram));
+    setStartOfProgram(doctor.startOfProgram.substring(0, 5));
+    setEndOfProgram(doctor.endOfProgram.substring(0, 5));
+    setSelectedDoctor(doctor);
   };
 
   const handleClear = () => {
     setId(null);
     setName("");
     setSpecialization("");
-    setStartOfProgram("");
-    setEndOfProgram("");
+    setStartOfProgram("07:00");
+    setEndOfProgram("07:30");
     setError("");
+    setSelectedDoctor(null);
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (selectedDoctor) {
+        await api.post("/admin/doctors/delete", selectedDoctor);
+        handleClear();
+        fetchDoctors();
+      } else {
+        setError("Please select a doctor to delete.");
+      }
+    } catch (error) {
+      console.error("Error deleting doctor:", error);
+      setError("Failed to delete doctor. Please try again.");
+    }
   };
 
   return (
     <div className="container mt-4" style={{ fontFamily: "Arial, sans-serif" }}>
       <h1 className="text-center text-success mb-4">Admin Doctor Management</h1>
 
-      <div className="table-responsive mx-auto" style={{ maxWidth: "600px" }}>
-        <table className="table table-bordered">
-          <thead className="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Specialization</th>
-              <th>Start of Program</th>
-              <th>End of Program</th>
-            </tr>
-          </thead>
-          <tbody>
-            {doctors.map((doctor) => (
-              <tr
-                key={doctor.id}
-                onClick={() => handleSelectDoctor(doctor)}
-                className={id === doctor.id ? "table-primary" : ""}
-                style={{ cursor: "pointer" }}
-              >
-                <td>{doctor.id}</td>
-                <td>{doctor.name}</td>
-                <td>{doctor.specialization}</td>
-                <td>{doctor.startOfProgram}</td>
-                <td>{doctor.endOfProgram}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
       <form
-        className="row g-3"
+        className="row g-3 mt-4"
         style={{ maxWidth: "600px", margin: "0 auto" }}
         onSubmit={handleSubmit}
       >
@@ -151,6 +136,7 @@ export function AdminDoctorManagement() {
             aria-label="Start of Program"
             value={startOfProgram}
             onChange={(e) => setStartOfProgram(e.target.value)}
+            required
           >
             {Array.from({ length: 29 }, (_, i) => {
               const hour = 7 + Math.floor(i / 2);
@@ -174,6 +160,7 @@ export function AdminDoctorManagement() {
             aria-label="End of Program"
             value={endOfProgram}
             onChange={(e) => setEndOfProgram(e.target.value)}
+            required
           >
             {Array.from({ length: 29 }, (_, i) => {
               const hour = 7 + Math.floor(i / 2);
@@ -208,7 +195,51 @@ export function AdminDoctorManagement() {
             Clear
           </button>
         </div>
+        <div className="col-12">
+          <button
+            type="button"
+            className="btn btn-primary w-100"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+        </div>
       </form>
+
+      <div
+        className="table-responsive mx-auto mt-5"
+        style={{ maxWidth: "600px" }}
+      >
+        <table className="table table-bordered">
+          <thead className="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Specialization</th>
+              <th>Start of Program</th>
+              <th>End of Program</th>
+            </tr>
+          </thead>
+          <tbody>
+            {doctors.map((doctor) => (
+              <tr
+                key={doctor.id}
+                onClick={() => handleSelectDoctor(doctor)}
+                className={
+                  selectedDoctor?.id === doctor.id ? "table-primary" : ""
+                }
+                style={{ cursor: "pointer" }}
+              >
+                <td>{doctor.id}</td>
+                <td>{doctor.name}</td>
+                <td>{doctor.specialization}</td>
+                <td>{doctor.startOfProgram}</td>
+                <td>{doctor.endOfProgram}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -4,10 +4,12 @@ import api from "../api";
 
 function AdminMedicalServicesManagement() {
   const [services, setServices] = useState<Array<MedicalServiceDTO>>([]);
+  const [selectedService, setSelectedService] =
+    useState<MedicalServiceDTO | null>(null);
   const [id, setId] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState<number | null>(null);
-  const [duration, setDuration] = useState<number | null>(null);
+  const [duration, setDuration] = useState<number>(30);
   const [error, setError] = useState("");
 
   const fetchServices = async () => {
@@ -40,7 +42,6 @@ function AdminMedicalServicesManagement() {
 
       handleClear();
       setError("");
-
       fetchServices();
     } catch (error) {
       console.error("Error adding service:", error);
@@ -53,13 +54,28 @@ function AdminMedicalServicesManagement() {
     setName(service.name);
     setPrice(service.price);
     setDuration(service.duration);
+    setSelectedService(service);
   };
 
   const handleClear = () => {
     setId(null);
     setName("");
     setPrice(null);
-    setDuration(null);
+    setDuration(30);
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (selectedService) {
+        await api.post("/admin/services/delete", selectedService);
+        handleClear();
+        fetchServices();
+        setError("");
+      }
+    } catch (error) {
+      console.error("Error deleting service:", error);
+      setError("Failed to delete service. Please try again.");
+    }
   };
 
   return (
@@ -68,36 +84,8 @@ function AdminMedicalServicesManagement() {
         Admin Medical Services Management
       </h1>
 
-      <div className="table-responsive mx-auto" style={{ maxWidth: "600px" }}>
-        <table className="table table-bordered">
-          <thead className="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Duration (minutes)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {services.map((service) => (
-              <tr
-                key={service.id}
-                onClick={() => handleSelectService(service)}
-                className={id === service.id ? "table-primary" : ""}
-                style={{ cursor: "pointer" }}
-              >
-                <td>{service.id}</td>
-                <td>{service.name}</td>
-                <td>{service.price}</td>
-                <td>{service.duration}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
       <form
-        className="row g-3"
+        className="row g-3 mt-4"
         style={{ maxWidth: "600px", margin: "0 auto" }}
         onSubmit={handleSubmit}
       >
@@ -168,7 +156,47 @@ function AdminMedicalServicesManagement() {
             Clear
           </button>
         </div>
+        <div className="col-12">
+          <button
+            type="button"
+            className="btn btn-primary w-100"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+        </div>
       </form>
+
+      <div
+        className="table-responsive mx-auto mt-5"
+        style={{ maxWidth: "600px" }}
+      >
+        <table className="table table-bordered">
+          <thead className="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Duration (minutes)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {services.map((service) => (
+              <tr
+                key={service.id}
+                onClick={() => handleSelectService(service)}
+                className={id === service.id ? "table-primary" : ""}
+                style={{ cursor: "pointer" }}
+              >
+                <td>{service.id}</td>
+                <td>{service.name}</td>
+                <td>{service.price}</td>
+                <td>{service.duration}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

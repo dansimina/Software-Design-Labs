@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import api from "../api";
 import { UserDTO } from "../types/UserDTO";
 import { CreateUserDTO } from "../types/CreateUserDTO";
-import Table from "./Table";
 
 function AdminReceptionistManagement() {
   const [receptionists, setReceptionists] = useState<Array<UserDTO>>([]);
@@ -55,31 +54,8 @@ function AdminReceptionistManagement() {
         Admin Receptionist Management
       </h1>
 
-      <div className="table-responsive mx-auto" style={{ maxWidth: "600px" }}>
-        <table className="table table-bordered">
-          <thead className="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            {receptionists.map((receptionist, rowIndex) => (
-              <tr key={rowIndex}>
-                <td>{receptionist.id}</td>
-                <td>{receptionist.name}</td>
-                <td>{receptionist.username}</td>
-                <td>{receptionist.type.type}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
       <form
-        className="row g-3"
+        className="row g-3 mt-4"
         style={{ maxWidth: "600px", margin: "0 auto" }}
         onSubmit={handleSubmit}
       >
@@ -138,6 +114,32 @@ function AdminReceptionistManagement() {
           </button>
         </div>
       </form>
+
+      <div
+        className="table-responsive mx-auto mt-5"
+        style={{ maxWidth: "600px" }}
+      >
+        <table className="table table-bordered">
+          <thead className="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {receptionists.map((receptionist, rowIndex) => (
+              <tr key={rowIndex}>
+                <td>{receptionist.id}</td>
+                <td>{receptionist.name}</td>
+                <td>{receptionist.username}</td>
+                <td>{receptionist.type.type}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

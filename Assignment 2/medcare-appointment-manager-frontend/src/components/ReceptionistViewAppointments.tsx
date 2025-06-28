@@ -6,6 +6,10 @@ import { MedicalServiceDTO } from "../types/MedicalServiceDTO";
 
 function ReceptionistViewAppointments() {
   const [appointments, setAppointments] = useState<Array<AppointmentDTO>>([]);
+  const [filteredAppointments, setFilteredAppointments] = useState<
+    Array<AppointmentDTO>
+  >([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [id, setId] = useState<number | null>(null);
   const [patientName, setPatientName] = useState("");
   const [doctor, setDoctor] = useState<DoctorDTO | null>(null);
@@ -22,6 +26,7 @@ function ReceptionistViewAppointments() {
         "/receptionist/appointments"
       );
       setAppointments(response.data);
+      setFilteredAppointments(response.data);
     } catch (error) {
       console.error("Error fetching appointments:", error);
     }
@@ -30,6 +35,13 @@ function ReceptionistViewAppointments() {
   useEffect(() => {
     fetchAppointments();
   }, []);
+
+  useEffect(() => {
+    const filtered = appointments.filter((appointment) =>
+      appointment.patientName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredAppointments(filtered);
+  }, [searchQuery, appointments]);
 
   const handleClick = (appointment: AppointmentDTO) => {
     setId(appointment.id);
@@ -119,6 +131,16 @@ function ReceptionistViewAppointments() {
         {error && <p className="text-danger mt-2">{error}</p>}
       </div>
 
+      <div className="mb-4">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by patient name"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
       <div className="table-responsive mb-4">
         <table className="table table-bordered">
           <thead>
@@ -133,7 +155,7 @@ function ReceptionistViewAppointments() {
             </tr>
           </thead>
           <tbody>
-            {appointments.map((appointment) => (
+            {filteredAppointments.map((appointment) => (
               <tr
                 key={appointment.id}
                 onClick={() => handleClick(appointment)}

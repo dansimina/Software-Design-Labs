@@ -288,6 +288,7 @@ function ReceptionistCreateAppointment() {
         </div>
       </div>
 
+      <h4>Select a Service</h4>
       <div className="table-responsive mx-auto" style={{ maxWidth: "600px" }}>
         <table className="table table-bordered">
           <thead className="thead-light">
